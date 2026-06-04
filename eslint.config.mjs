@@ -6,7 +6,7 @@ import eslintConfigPrettier from "eslint-config-prettier/flat";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  ...eslintConfigPrettier,
+  eslintConfigPrettier,
   {
     rules: {
       complexity: ["error", 7],
