@@ -15,11 +15,17 @@
     }
 }
 
+html {
+    color-scheme: light dark;
+}
+
 body {
     /* 4. Increase line-height */
     line-height: 1.5;
     /* 5. Improve text rendering */
     -webkit-font-smoothing: antialiased;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
 }
 
 /* 6. Improve media defaults */
@@ -75,4 +81,39 @@ h1, h2, h3, h4, h5, h6 {
     --ease-in-out-quint: cubic-bezier(.86, 0, .07, 1);
     --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
     --ease-in-out-circ: cubic-bezier(.785, .135, .15, .86);
+
+    /* Surfaces */
+    --color-bg: #fff;
+    --color-fg: #000;
+
+    /* Layout */
+    --layout-gutter-width: 25%;
+
+    /* Thin borders — alpha blends on any background */
+    --border-width: 1px;
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --border-default: rgba(0, 0, 0, 0.1);
+    --border-strong: rgba(0, 0, 0, 0.16);
+}
+
+@media (min-resolution: 2dppx) {
+    :root {
+        --border-width: 0.5px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #0a0a0a;
+        --color-fg: #f5f5f5;
+
+        --border-subtle: rgba(255, 255, 255, 0.06);
+        --border-default: rgba(255, 255, 255, 0.1);
+        --border-strong: rgba(255, 255, 255, 0.16);
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--border-strong);
+    outline-offset: 2px;
 }

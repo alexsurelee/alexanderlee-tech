@@ -1,0 +1,60 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+}
+
+.header {
+    padding: 1.5rem clamp(1.25rem, 4vw, 2.5rem);
+    border-bottom: var(--border-width) solid var(--border-subtle);
+}
+
+.nav {
+    width: fit-content;
+}
+
+.homeLink {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.homeLink:focus-visible {
+    outline-offset: 4px;
+}
+
+.body {
+    display: grid;
+    flex: 1;
+    grid-template-columns: var(--layout-gutter-width) 1fr var(--layout-gutter-width);
+}
+
+.leftGutter {
+    border-right: var(--border-width) solid var(--border-subtle);
+}
+
+.rightGutter {
+    border-left: var(--border-width) solid var(--border-subtle);
+}
+
+.main {
+    padding: 4rem clamp(1.5rem, 5vw, 4rem) 3rem;
+    max-width: 65ch;
+}
+
+@media (max-width: 48rem) {
+    .body {
+        grid-template-columns: 1fr;
+    }
+
+    .leftGutter, .rightGutter {
+        display: none;
+    }
+
+    .main {
+        padding-top: 2.5rem;
+        max-width: none;
+    }
+}
