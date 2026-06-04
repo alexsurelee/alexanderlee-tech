@@ -2,6 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import styles from "./typewriter-title.module.css";
+import clsx from "clsx";
 
 export const INTRO_KEY = "hasSeenIntro";
 
@@ -26,7 +27,10 @@ function getServerIntroSnapshot(): IntroState {
   return "pending";
 }
 
-export function TypewriterTitle() {
+export function TypewriterTitle({
+  className,
+  ...props
+}: React.HTMLProps<HTMLDivElement>) {
   const introState = useSyncExternalStore(
     subscribe,
     getIntroSnapshot,
@@ -46,7 +50,11 @@ export function TypewriterTitle() {
   }, [introState]);
 
   return (
-    <div className={styles.titleWrapper} data-intro={introState}>
+    <div
+      className={clsx(styles.titleWrapper, className)}
+      data-intro={introState}
+      {...props}
+    >
       <h1 className={styles.title}>
         <span className={styles.titleText}>alexanderlee.tech</span>
       </h1>

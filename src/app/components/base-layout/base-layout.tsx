@@ -15,7 +15,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
               height={"50"}
               alt={"Home"}
             />
-            <TypewriterTitle />
+            <TypewriterTitle aria-hidden={true} />
           </Link>
         </nav>
       </header>
