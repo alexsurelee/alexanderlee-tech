@@ -1,0 +1,16 @@
+.title {
+    &:after {
+        content: '█';
+        animation: blink 1.5s var(--ease-in-out-cubic) infinite;
+        padding-left: 0.2rem;
+    }
+}
+
+@keyframes blink {
+    from, to {
+        color: transparent
+    }
+    50% {
+        color: black
+    }
+}
