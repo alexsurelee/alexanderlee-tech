@@ -1,0 +1,75 @@
+.titleWrapper {
+    width: fit-content;
+    white-space: nowrap;
+}
+
+.title {
+    --typing-duration: 3.5s;
+    --blink-pause: 0.3s;
+
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+    text-wrap: nowrap;
+
+    &:after {
+        content: '█';
+        color: currentColor;
+        padding-left: 0.2rem;
+    }
+}
+
+.titleText {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.titleWrapper[data-intro="pending"] {
+    opacity: 0;
+}
+
+.titleWrapper[data-intro="pending"] .titleText,
+.titleWrapper[data-intro="skip"] .titleText {
+    width: 17ch;
+}
+
+.titleWrapper[data-intro="animate"] .titleText {
+    width: 0;
+    animation: typing var(--typing-duration) steps(17, end) forwards;
+}
+
+.titleWrapper[data-intro="animate"] .title:after {
+    animation: blink 1s step-end calc(var(--typing-duration) + var(--blink-pause)) infinite;
+}
+
+.titleWrapper[data-intro="skip"] .title:after {
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to {
+        color: transparent;
+    }
+
+    50% {
+        color: currentColor;
+    }
+}
+
+@keyframes typing {
+    to {
+        width: 17ch;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .titleWrapper[data-intro="animate"] .titleText {
+        animation: none;
+        width: 17ch;
+    }
+
+    .titleWrapper .title:after {
+        animation: none;
+    }
+}
