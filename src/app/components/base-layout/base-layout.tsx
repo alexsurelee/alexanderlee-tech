@@ -3,7 +3,7 @@ import Link from "next/link";
 import { TypewriterTitle } from "@/app/components/typewriter-title";
 import styles from "./layout.module.css";
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function BaseLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <nav>
