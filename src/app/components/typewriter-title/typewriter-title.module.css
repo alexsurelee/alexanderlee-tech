@@ -11,6 +11,7 @@
     align-items: baseline;
     white-space: nowrap;
     text-wrap: nowrap;
+    color: black;
 
     &:after {
         content: '█';
