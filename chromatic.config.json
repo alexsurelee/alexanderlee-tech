@@ -1,0 +1,5 @@
+{
+  "buildScriptName": "build-storybook",
+  "onlyChanged": true,
+  "externals": ["public/**"]
+}
