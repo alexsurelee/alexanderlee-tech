@@ -1,27 +1,7 @@
 import Link from "next/link";
 import { BaseLayout } from "@/app/components/base-layout/base-layout";
-import { searchPosts } from "@/app/lib/posts";
+import { formatPostDate, searchPosts } from "@/app/lib/posts";
 import styles from "./blog.module.css";
-
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-function formatDate(iso: string): string {
-  const [year, month, day] = iso.split("-").map(Number);
-  return `${MONTHS[month - 1]} ${day}, ${year}`;
-}
 
 function firstParam(value: string | string[] | undefined): string {
   if (Array.isArray(value)) {
@@ -65,7 +45,7 @@ export default async function BlogPage({
               <p>{post.summary}</p>
               <div className={styles.metaRow}>
                 <span className="meta">
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  <time dateTime={post.date}>{formatPostDate(post.date)}</time>
                 </span>
                 <ul className={styles.tags}>
                   {post.tags.map((tag) => (

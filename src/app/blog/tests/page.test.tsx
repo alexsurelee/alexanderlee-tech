@@ -5,6 +5,7 @@ import { posts, searchPosts } from "@/app/lib/posts";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/blog",
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
 async function renderBlog(searchParams: { q?: string | string[] }) {

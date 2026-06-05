@@ -4,6 +4,7 @@ import Page from "../page";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
 describe("Home", () => {

@@ -7,6 +7,32 @@ export type Post = {
   tags: string[];
 };
 
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+/** Formats an ISO `YYYY-MM-DD` date deterministically (no locale/timezone drift). */
+export function formatPostDate(iso: string): string {
+  const [year, month, day] = iso.split("-").map(Number);
+  return `${MONTHS[month - 1]} ${day}, ${year}`;
+}
+
+/** Returns the post with the given slug, or `undefined` if none matches. */
+export function getPost(slug: string): Post | undefined {
+  return posts.find((post) => post.slug === slug);
+}
+
 /**
  * Static, build-time blog index. The single source of truth for the blog list,
  * the desktop search, and the command palette.

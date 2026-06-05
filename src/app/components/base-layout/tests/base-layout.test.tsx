@@ -4,6 +4,7 @@ import { BaseLayout } from "../base-layout";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
 describe("BaseLayout", () => {
