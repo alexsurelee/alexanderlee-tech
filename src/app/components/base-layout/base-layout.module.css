@@ -9,22 +9,6 @@
     border-bottom: var(--border-width) solid var(--border-subtle);
 }
 
-.nav {
-    width: fit-content;
-}
-
-.homeLink {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: inherit;
-    text-decoration: none;
-}
-
-.homeLink:focus-visible {
-    outline-offset: 4px;
-}
-
 .body {
     display: grid;
     flex: 1;

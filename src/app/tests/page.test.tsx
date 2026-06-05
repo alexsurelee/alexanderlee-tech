@@ -1,6 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Page from "../page";
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/",
+}));
 
 describe("Home", () => {
   it("renders welcome content in the main landmark", () => {
