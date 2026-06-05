@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { clsx } from "clsx";
+import { AppHotkeysProvider } from "@/app/components/hotkeys-provider";
 import { atkinson, monaspace } from "./fonts";
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={clsx(atkinson.variable, monaspace.variable)}>
-      <body>{children}</body>
+      <body>
+        <AppHotkeysProvider>{children}</AppHotkeysProvider>
+      </body>
     </html>
   );
 }

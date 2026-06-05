@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Navbar } from "./navbar";
 
 type NavbarStoryArgs = {
@@ -29,7 +30,10 @@ const meta = {
     (Story, { args }) => {
       const { pathname } = args as NavbarStoryArgs;
       return (
-        <div key={pathname}>
+        <div
+          key={pathname}
+          style={{ padding: "1.5rem clamp(1.25rem, 4vw, 2.5rem)" }}
+        >
           <Story />
         </div>
       );
@@ -58,6 +62,51 @@ export const Uses: Story = {
   args: { pathname: "/uses" },
   parameters: {
     nextjs: { navigation: { pathname: "/uses" } },
+  },
+};
+
+export const Mobile: Story = {
+  args: { pathname: "/" },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+    nextjs: { navigation: { pathname: "/" } },
+  },
+};
+
+export const MobilePaletteOpen: Story = {
+  args: { pathname: "/" },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+    chromatic: { delay: 300 },
+    nextjs: { navigation: { pathname: "/" } },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(await canvas.findByRole("button", { name: "Menu" }));
+
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("dialog", { name: "Command menu" }),
+      ).toBeInTheDocument();
+    });
+  },
+};
+
+export const DesktopPaletteOpen: Story = {
+  args: { pathname: "/" },
+  parameters: {
+    chromatic: { delay: 300 },
+    nextjs: { navigation: { pathname: "/" } },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.keyboard("{Meta>}k{/Meta}");
+
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("dialog", { name: "Command menu" }),
+      ).toBeInTheDocument();
+    });
   },
 };
 

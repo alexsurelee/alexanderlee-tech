@@ -1,6 +1,7 @@
 import type { Preview } from "@storybook/nextjs-vite";
 import React from "react";
 import clsx from "clsx";
+import { HotkeysProvider } from "@tanstack/react-hotkeys";
 import "@/app/globals.css";
 import { atkinson, monaspace } from "@/app/fonts";
 
@@ -22,9 +23,11 @@ if (typeof document !== "undefined") {
 const preview: Preview = {
   decorators: [
     (Story) => (
-      <div className={fontClassName}>
-        <Story />
-      </div>
+      <HotkeysProvider>
+        <div className={fontClassName}>
+          <Story />
+        </div>
+      </HotkeysProvider>
     ),
   ],
   parameters: {

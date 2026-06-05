@@ -18,27 +18,31 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => (
-    <BaseLayout>
-      <h1>Page title</h1>
-      <p>A short paragraph of sample content inside the main column.</p>
-    </BaseLayout>
-  ),
+  args: {
+    children: (
+      <>
+        <h1>Page title</h1>
+        <p>A short paragraph of sample content inside the main column.</p>
+      </>
+    ),
+  },
 };
 
 export const LongPage: Story = {
-  render: () => (
-    <BaseLayout>
-      <h1>Long page</h1>
-      {Array.from({ length: 8 }, (_, index) => (
-        <section key={index}>
-          <h2>Section {index + 1}</h2>
-          <p>
-            Enough copy to exercise vertical scroll and gutter layout across
-            multiple sections.
-          </p>
-        </section>
-      ))}
-    </BaseLayout>
-  ),
+  args: {
+    children: (
+      <>
+        <h1>Long page</h1>
+        {Array.from({ length: 8 }, (_, index) => (
+          <section key={index}>
+            <h2>Section {index + 1}</h2>
+            <p>
+              Enough copy to exercise vertical scroll and gutter layout across
+              multiple sections.
+            </p>
+          </section>
+        ))}
+      </>
+    ),
+  },
 };
