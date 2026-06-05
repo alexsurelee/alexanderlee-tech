@@ -1,11 +1,11 @@
-import { expect, describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Page from "../page";
 
 describe("Home", () => {
-  it("renders a heading", () => {
+  it("renders welcome content in the main landmark", () => {
     render(<Page />);
 
-    expect(screen.getByRole("heading", { level: 1 })).toBeDefined();
+    expect(screen.getByRole("main")).toHaveTextContent("Welcome👋");
   });
 });

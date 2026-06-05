@@ -18,33 +18,35 @@ describe("BaseLayout", () => {
       </BaseLayout>,
     );
 
-    const main = screen.getByRole("main");
-    const content = screen.getByText("Page content");
-    expect(main.contains(content)).toBe(true);
+    expect(screen.getByRole("main")).toContainElement(
+      screen.getByText("Page content"),
+    );
   });
 
   it("renders a home link to the root path", () => {
     render(<BaseLayout>content</BaseLayout>);
 
-    const homeLink = screen.getByRole("link", { name: "Home" });
-    expect(homeLink.getAttribute("href")).toBe("/");
+    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
+      "href",
+      "/",
+    );
   });
 
   it("renders the logo in the home link", () => {
     render(<BaseLayout>content</BaseLayout>);
 
-    const logo = screen.getByRole("img", { name: "Home" });
-    expect(logo.getAttribute("src")).toContain("logo-small.svg");
+    expect(screen.getByRole("img", { name: "Home" })).toHaveAttribute(
+      "src",
+      expect.stringContaining("logo-small.svg"),
+    );
   });
 
   it("renders the site title as a decorative heading", () => {
     render(<BaseLayout>content</BaseLayout>);
 
-    const title = screen.getByRole("heading", {
-      level: 1,
-      hidden: true,
-    });
-    expect(title.textContent).toBe("alexanderlee.tech");
+    expect(
+      screen.getByRole("heading", { level: 1, hidden: true }),
+    ).toHaveTextContent("alexanderlee.tech");
   });
 
   it("marks layout gutters as decorative", () => {
