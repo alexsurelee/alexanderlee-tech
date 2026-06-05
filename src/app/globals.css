@@ -20,9 +20,10 @@ html {
 }
 
 body {
-    /* 4. Increase line-height */
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-body);
+    font-weight: 400;
     line-height: 1.5;
-    /* 5. Improve text rendering */
     -webkit-font-smoothing: antialiased;
     background-color: var(--color-bg);
     color: var(--color-fg);
@@ -50,7 +51,45 @@ p {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans), sans-serif;
     text-wrap: balance;
+}
+
+h1 {
+    font-size: var(--text-h1);
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+h2 {
+    font-size: var(--text-h2);
+    font-weight: 700;
+}
+
+h3 {
+    font-size: var(--text-h3);
+    font-weight: 600;
+}
+
+h4 {
+    font-size: var(--text-h4);
+    font-weight: 600;
+}
+
+small {
+    font-size: var(--text-small);
+    font-weight: 400;
+}
+
+code,
+pre {
+    font-family: var(--font-mono), monospace;
+    font-size: var(--text-code);
+    font-weight: 400;
+}
+
+pre code {
+    font-size: inherit;
 }
 
 /*
@@ -81,6 +120,28 @@ h1, h2, h3, h4, h5, h6 {
     --ease-in-out-quint: cubic-bezier(.86, 0, .07, 1);
     --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
     --ease-in-out-circ: cubic-bezier(.785, .135, .15, .86);
+
+    /* Typography */
+    /* defined by next/font */
+    /*noinspection CssUnresolvedCustomProperty*/
+    --font-sans: var(--font-atkinson), sans-serif;
+    /* defined by next/font */
+    /*noinspection CssUnresolvedCustomProperty*/
+    --font-mono: var(--font-monaspace), monospace;
+
+    --text-hero: clamp(4.5rem, 5vw + 2rem, 6rem);
+    --text-h1: 3rem;
+    --text-h2: 2rem;
+    --text-h3: 1.5rem;
+    --text-h4: 1.25rem;
+    --text-body: 1.125rem;
+    --text-small: 0.875rem;
+    --text-nav: 1rem;
+
+    --text-section-label: 0.8125rem;
+    --text-tag: 0.75rem;
+    --text-meta: 0.875rem;
+    --text-code: 0.9375rem;
 
     /* Surfaces */
     --color-bg: #fff;
@@ -116,4 +177,50 @@ h1, h2, h3, h4, h5, h6 {
 :focus-visible {
     outline: 2px solid var(--border-strong);
     outline-offset: 2px;
+}
+
+.hero {
+    font-family: var(--font-sans), sans-serif;
+    font-size: var(--text-hero);
+    font-weight: 700;
+    line-height: 0.95;
+}
+
+.sectionLabel {
+    font-family: var(--font-mono), monospace;
+    font-size: var(--text-section-label);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.meta {
+    font-family: var(--font-mono), monospace;
+    font-size: var(--text-meta);
+    font-weight: 500;
+}
+
+.tag {
+    font-family: var(--font-mono), monospace;
+    font-size: var(--text-tag);
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.navLink {
+    font-size: var(--text-nav);
+    font-weight: 500;
+}
+
+.navLink[data-current] {
+    font-weight: 600;
+}
+
+.btnPrimary {
+    font-size: var(--text-nav);
+    font-weight: 600;
+}
+
+.btnSecondary {
+    font-weight: 500;
 }

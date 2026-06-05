@@ -11,6 +11,7 @@ export function BaseLayout({ children }: { children: React.ReactNode }) {
           <Link href={"/"} className={styles.homeLink}>
             <Image
               src={"logo-small.svg"}
+              loading="eager"
               width="50"
               height={"50"}
               alt={"Home"}

@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import localFont from "next/font/local";
 import { clsx } from "clsx";
-
-const departureMono = localFont({ src: "../../public/departure-mono.woff2" });
+import { atkinson, monaspace } from "./fonts";
 
 export const metadata: Metadata = {
   title: "alexanderlee.tech | Alexander Lee",
@@ -17,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={clsx(departureMono.className)}>
+    <html lang="en" className={clsx(atkinson.variable, monaspace.variable)}>
       <body>{children}</body>
     </html>
   );

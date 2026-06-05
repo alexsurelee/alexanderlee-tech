@@ -6,9 +6,13 @@
 .title {
     --typing-duration: 3.5s;
     --blink-pause: 0.3s;
+    --title-chars: 17;
 
     display: inline-flex;
     align-items: baseline;
+    font-family: var(--font-mono), monospace;
+    font-size: var(--text-nav);
+    font-weight: 500;
     white-space: nowrap;
     text-wrap: nowrap;
     color: var(--color-fg);
@@ -32,12 +36,12 @@
 
 .titleWrapper[data-intro="pending"] .titleText,
 .titleWrapper[data-intro="skip"] .titleText {
-    width: 17ch;
+    width: calc(var(--title-chars) * 1ch);
 }
 
 .titleWrapper[data-intro="animate"] .titleText {
     width: 0;
-    animation: typing var(--typing-duration) steps(17, end) forwards;
+    animation: typing var(--typing-duration) steps(var(--title-chars), end) forwards;
 }
 
 .titleWrapper[data-intro="animate"] .title:after {
@@ -60,14 +64,14 @@
 
 @keyframes typing {
     to {
-        width: 17ch;
+        width: calc(var(--title-chars) * 1ch);
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .titleWrapper[data-intro="animate"] .titleText {
         animation: none;
-        width: 17ch;
+        width: calc(var(--title-chars) * 1ch);
     }
 
     .titleWrapper .title:after {
