@@ -12,17 +12,21 @@ import { CommandPalette } from "@/app/components/command-palette";
 import { isRouteActive, navRoutes } from "@/app/lib/routes";
 import { NAV_WIDE_QUERY } from "@/app/lib/nav-breakpoint";
 import { useMediaQuery } from "@/app/lib/use-media-query";
+import { runViewTransition } from "@/app/lib/run-view-transition";
 import styles from "./navbar.module.css";
 
 export function Navbar() {
   const pathname = usePathname();
   const isWide = useMediaQuery(NAV_WIDE_QUERY);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [animatePalette, setAnimatePalette] = useState(true);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
 
   useHotkey(
     "Mod+K",
     () => {
+      // Keyboard-initiated and frequently used: open instantly, no animation.
+      setAnimatePalette(false);
       setPaletteOpen(true);
     },
     {
@@ -32,11 +36,12 @@ export function Navbar() {
   );
 
   function openPalette() {
-    setPaletteOpen(true);
+    setAnimatePalette(true);
+    runViewTransition(() => setPaletteOpen(true));
   }
 
   function closePalette() {
-    setPaletteOpen(false);
+    runViewTransition(() => setPaletteOpen(false));
   }
 
   return (
@@ -92,6 +97,7 @@ export function Navbar() {
 
       <CommandPalette
         open={paletteOpen}
+        animateEnter={animatePalette}
         onClose={closePalette}
         returnFocusRef={menuTriggerRef}
       />

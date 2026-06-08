@@ -69,3 +69,9 @@
 .link[data-current] {
     text-decoration: underline;
 }
+
+.link:focus-visible,
+.menuTrigger:focus-visible {
+    outline: 2px solid var(--border-strong);
+    outline-offset: 4px;
+}

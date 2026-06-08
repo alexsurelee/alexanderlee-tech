@@ -7,6 +7,7 @@
 .header {
     padding: 1.5rem clamp(1.25rem, 4vw, 2.5rem);
     border-bottom: var(--border-width) solid var(--border-subtle);
+    view-transition-name: site-header;
 }
 
 .body {
@@ -26,6 +27,7 @@
 .main {
     padding: 4rem clamp(1.5rem, 5vw, 4rem) 3rem;
     max-width: 65ch;
+    view-transition-name: page-content;
 }
 
 @media (max-width: 48rem) {

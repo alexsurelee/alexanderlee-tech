@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "@/app/lib/use-transition-router";
 import clsx from "clsx";
 import { Combobox, type ComboboxOption } from "@/app/components/combobox";
 import { useOpenIntent } from "@/app/lib/use-open-intent";
+import { usePresence } from "@/app/lib/use-presence";
 import { formatPostDate, searchPosts, type Post } from "@/app/lib/posts";
 import styles from "./blog-search.module.css";
 
@@ -17,7 +18,7 @@ function toOptions(posts: Post[]): ComboboxOption<Post>[] {
 const CLOSE_DELAY = 150;
 
 export function BlogSearch({ current }: { current: boolean }) {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -25,6 +26,11 @@ export function BlogSearch({ current }: { current: boolean }) {
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { handlers, cancel } = useOpenIntent({ onOpen: () => setOpen(true) });
+  const {
+    ref: panelRef,
+    mounted: panelMounted,
+    state: panelState,
+  } = usePresence<HTMLDivElement>(open);
 
   function clearCloseTimer() {
     if (closeTimerRef.current !== null) {
@@ -124,8 +130,8 @@ export function BlogSearch({ current }: { current: boolean }) {
         Blog
       </Link>
 
-      {open ? (
-        <div className={styles.panel}>
+      {panelMounted ? (
+        <div ref={panelRef} className={styles.panel} data-state={panelState}>
           <Combobox<Post>
             label="Search blog posts"
             placeholder="Search posts…"

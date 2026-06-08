@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "@/app/lib/use-transition-router";
+import { runViewTransition } from "@/app/lib/run-view-transition";
 import clsx from "clsx";
 import { useCombobox, type ComboboxOption } from "@/app/components/combobox";
 import { formatPostDate, type Post } from "@/app/lib/posts";
@@ -19,6 +20,11 @@ type CommandPaletteProps = {
   onClose: () => void;
   /** Element to restore focus to when the palette closes. */
   returnFocusRef?: React.RefObject<HTMLElement | null>;
+  /**
+   * Plays the open animation on mount. Set false for keyboard-initiated opens
+   * (e.g. Cmd/Ctrl-K) so the palette appears instantly.
+   */
+  animateEnter?: boolean;
 };
 
 function resultCountLabel(count: number): string {
@@ -26,12 +32,19 @@ function resultCountLabel(count: number): string {
   return `${count} result${count === 1 ? "" : "s"}`;
 }
 
+function emptyStateText(query: string): string {
+  const trimmed = query.trim();
+  if (trimmed === "") return "No pages or posts to show.";
+  return `No results for “${trimmed}”.`;
+}
+
 export function CommandPalette({
   open,
   onClose,
   returnFocusRef,
+  animateEnter = true,
 }: CommandPaletteProps) {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
@@ -48,7 +61,7 @@ export function CommandPalette({
 
   function close({ restoreFocus = false } = {}) {
     setQuery("");
-    onClose();
+    runViewTransition(() => onClose());
     if (restoreFocus) {
       returnFocusRef?.current?.focus();
     }
@@ -138,6 +151,7 @@ export function CommandPalette({
   return createPortal(
     <div
       className={styles.overlay}
+      data-animate={animateEnter}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           close({ restoreFocus: true });
@@ -210,9 +224,7 @@ export function CommandPalette({
           </ul>
         ) : (
           <div className={styles.empty} role="presentation">
-            {query.trim() === ""
-              ? "No pages or posts to show."
-              : `No results for “${query.trim()}”.`}
+            {emptyStateText(query)}
           </div>
         )}
 

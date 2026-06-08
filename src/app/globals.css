@@ -233,3 +233,96 @@ pre code {
 .btnSecondary {
     font-weight: 500;
 }
+
+/* Motion + view transitions (Phase 5) */
+
+:root {
+    --duration-exit: 120ms;
+    --duration-enter: 160ms;
+    --duration-move: 200ms;
+    --duration-panel: 140ms;
+}
+
+@keyframes fade-in {
+    from {
+        filter: blur(2px);
+        opacity: 0;
+    }
+
+    to {
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+
+@keyframes slide {
+    from {
+        translate: var(--slide-offset);
+    }
+
+    to {
+        translate: 0;
+    }
+}
+
+/* Route transitions — main content only; header stays isolated. */
+
+html[data-nav-transition="nav-forward"] ::view-transition-old(page-content) {
+    --slide-offset: -28px;
+    animation:
+        var(--duration-exit) ease-in both fade-in reverse,
+        var(--duration-move) ease-in both slide reverse;
+}
+
+html[data-nav-transition="nav-forward"] ::view-transition-new(page-content) {
+    --slide-offset: 28px;
+    animation:
+        var(--duration-enter) ease-out var(--duration-exit) both fade-in,
+        var(--duration-move) ease-out both slide;
+}
+
+html[data-nav-transition="nav-back"] ::view-transition-old(page-content) {
+    --slide-offset: 28px;
+    animation:
+        var(--duration-exit) ease-in both fade-in reverse,
+        var(--duration-move) ease-in both slide reverse;
+}
+
+html[data-nav-transition="nav-back"] ::view-transition-new(page-content) {
+    --slide-offset: -28px;
+    animation:
+        var(--duration-enter) ease-out var(--duration-exit) both fade-in,
+        var(--duration-move) ease-out both slide;
+}
+
+html[data-nav-transition="nav-fade"] ::view-transition-old(page-content) {
+    animation: var(--duration-exit) ease-in both fade-in reverse;
+}
+
+html[data-nav-transition="nav-fade"] ::view-transition-new(page-content) {
+    animation: var(--duration-enter) ease-out var(--duration-exit) both fade-in;
+}
+
+::view-transition-group(site-header) {
+    animation: none;
+    z-index: 100;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    ::view-transition-old(*),
+    ::view-transition-new(*),
+    ::view-transition-group(*) {
+        animation-duration: 0s !important;
+        animation-delay: 0s !important;
+    }
+}

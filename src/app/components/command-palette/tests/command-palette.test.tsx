@@ -8,8 +8,8 @@ import { searchPosts } from "@/app/lib/posts";
 
 const { push } = vi.hoisted(() => ({ push: vi.fn() }));
 
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push }),
+vi.mock("@/app/lib/use-transition-router", () => ({
+  useTransitionRouter: () => ({ push }),
 }));
 
 function Harness({
@@ -119,6 +119,18 @@ describe("CommandPalette", () => {
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Menu" })).toHaveFocus();
+  });
+
+  it("announces the result count politely", async () => {
+    const user = userEvent.setup();
+    render(<Harness />);
+
+    const status = screen.getByRole("status");
+    const total = paletteRoutes.length + searchPosts("").length;
+    expect(status).toHaveTextContent(`${total} results`);
+
+    await user.type(screen.getByRole("combobox"), "uses");
+    expect(status).toHaveTextContent("1 result");
   });
 
   it("locks background scroll while open", () => {

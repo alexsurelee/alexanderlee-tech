@@ -31,6 +31,47 @@
     border: var(--border-width) solid var(--border-default);
     border-radius: 0.75rem;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    /* Anchored to the Blog trigger at the panel's top-right corner, so it grows
+       out of / collapses back into the button. */
+    transform-origin: top right;
+}
+
+.panel[data-state="open"] {
+    animation: panel-in var(--duration-panel) var(--ease-out-cubic) both;
+}
+
+.panel[data-state="closing"] {
+    pointer-events: none;
+    animation: panel-out var(--duration-exit) var(--ease-in-cubic) both;
+}
+
+/* Keyframes must live in this module so CSS Modules scopes both the definition
+   and the `animation` reference to the same hashed name. A global keyframe would
+   be referenced under a scoped name that matches nothing, so no animation runs
+   and `animationend` never fires (leaving the panel stuck mounted). Distinct
+   in/out names also guarantee toggling data-state restarts the animation. */
+@keyframes panel-in {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes panel-out {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.92);
+    }
 }
 
 /* Bridges the visual gap above the panel so moving the pointer from the trigger

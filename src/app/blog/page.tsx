@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink } from "@/app/components/transition-link";
 import { BaseLayout } from "@/app/components/base-layout/base-layout";
 import { formatPostDate, searchPosts } from "@/app/lib/posts";
 import styles from "./blog.module.css";
@@ -39,9 +39,12 @@ export default async function BlogPage({
         <ul className={styles.list}>
           {results.map((post) => (
             <li key={post.slug} className={styles.item}>
-              <Link href={`/blog/${post.slug}`} className={styles.postLink}>
+              <TransitionLink
+                href={`/blog/${post.slug}`}
+                className={styles.postLink}
+              >
                 <h2 className={styles.title}>{post.title}</h2>
-              </Link>
+              </TransitionLink>
               <p>{post.summary}</p>
               <div className={styles.metaRow}>
                 <span className="meta">

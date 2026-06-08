@@ -12,9 +12,8 @@ import { searchPosts } from "@/app/lib/posts";
 
 const { push } = vi.hoisted(() => ({ push: vi.fn() }));
 
-vi.mock("next/navigation", () => ({
-  usePathname: () => "/",
-  useRouter: () => ({ push }),
+vi.mock("@/app/lib/use-transition-router", () => ({
+  useTransitionRouter: () => ({ push }),
 }));
 
 const DELAY = 120;
@@ -22,6 +21,15 @@ const CLOSE_DELAY = 150;
 
 function getRoot(container: HTMLElement): HTMLElement {
   return container.firstElementChild as HTMLElement;
+}
+
+// The panel stays mounted through its exit animation, then unmounts once the
+// animation settles. jsdom has no Web Animations, so there is nothing to await
+// and the unmount resolves on the next microtask — flush it.
+async function flushExit() {
+  await act(async () => {
+    await Promise.resolve();
+  });
 }
 
 function advance(ms: number) {
@@ -137,12 +145,13 @@ describe("BlogSearch", () => {
     expect(push).toHaveBeenCalledWith("/blog?q=react");
   });
 
-  it("closes on Escape and restores focus to the Blog link", () => {
+  it("closes on Escape and restores focus to the Blog link", async () => {
     const { container } = render(<BlogSearch current={false} />);
     fireEvent.pointerEnter(getRoot(container));
     advance(DELAY);
 
     fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
+    await flushExit();
 
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Blog" })).toHaveFocus();
@@ -163,13 +172,39 @@ describe("BlogSearch", () => {
     expect(screen.getByRole("combobox")).toBeInTheDocument();
   });
 
-  it("closes on an outside pointer interaction", () => {
+  it("announces the result count politely", () => {
+    const { container } = render(<BlogSearch current={false} />);
+    fireEvent.pointerEnter(getRoot(container));
+    advance(DELAY);
+
+    const status = screen.getByRole("status");
+    expect(status).toHaveTextContent(
+      `${searchPosts("").length} results`,
+    );
+  });
+
+  it("keeps the panel mounted through its exit animation, then unmounts", async () => {
+    const { container } = render(<BlogSearch current={false} />);
+    fireEvent.pointerEnter(getRoot(container));
+    advance(DELAY);
+
+    fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
+
+    expect(container.querySelector('[data-state="closing"]')).not.toBeNull();
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+
+    await flushExit();
+    expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+  });
+
+  it("closes on an outside pointer interaction", async () => {
     const { container } = render(<BlogSearch current={false} />);
     fireEvent.pointerEnter(getRoot(container));
     advance(DELAY);
     expect(screen.getByRole("combobox")).toBeInTheDocument();
 
     fireEvent.pointerDown(document.body);
+    await flushExit();
 
     expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
   });
