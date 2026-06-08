@@ -52,7 +52,7 @@ export function Navbar() {
     >
       <Link href="/" className={styles.homeLink}>
         <Image
-          src={"logo-small.svg"}
+          src="/logo-small.svg"
           loading="eager"
           width="50"
           height={"50"}

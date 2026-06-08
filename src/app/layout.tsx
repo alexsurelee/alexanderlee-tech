@@ -7,7 +7,7 @@ import { atkinson, monaspace } from "./fonts";
 export const metadata: Metadata = {
   title: "alexanderlee.tech | Alexander Lee",
   description: "Writings about software design, technology, and more.",
-  icons: "logo-simple-small.svg",
+  icons: "/logo-simple-small.svg",
 };
 
 export default function RootLayout({
