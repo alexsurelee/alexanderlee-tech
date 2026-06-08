@@ -46,13 +46,6 @@
   border-radius: 1rem;
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
   transform-origin: top center;
-  animation: panel-scale-in var(--duration-enter) var(--ease-out-cubic) both;
-}
-
-/* Keyboard-initiated opens (Cmd/Ctrl-K) appear instantly — no enter animation. */
-.overlay[data-animate="false"],
-.overlay[data-animate="false"] .commandPalette {
-  animation: none;
 }
 
 .overlay {
@@ -64,7 +57,23 @@
   justify-content: center;
   padding: clamp(var(--space-md), 8vh, var(--space-2xl)) var(--space-md);
   background-color: rgba(0, 0, 0, 0.45);
+}
+
+.overlay[data-state="open"]:not([data-animate="false"]) {
   animation: overlay-in var(--duration-panel) var(--ease-out-cubic) both;
+}
+
+.overlay[data-state="open"]:not([data-animate="false"]) .commandPalette {
+  animation: panel-scale-in var(--duration-enter) var(--ease-out-cubic) both;
+}
+
+.overlay[data-state="closing"] {
+  pointer-events: none;
+  animation: overlay-out var(--duration-exit) var(--ease-in-cubic) both;
+}
+
+.overlay[data-state="closing"] .commandPalette {
+  animation: panel-scale-out var(--duration-exit) var(--ease-in-cubic) both;
 }
 
 .input {
@@ -194,6 +203,28 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes overlay-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes panel-scale-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
   }
 }
 

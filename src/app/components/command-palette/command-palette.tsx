@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { useTransitionRouter } from "@/app/lib/use-transition-router";
-import { runViewTransition } from "@/app/lib/run-view-transition";
 import clsx from "clsx";
 import { useCombobox, type ComboboxOption } from "@/app/components/combobox";
 import { formatPostDate, type Post } from "@/app/lib/posts";
 import { useFocusTrap, useScrollLock } from "@/app/lib/use-modal";
+import { usePresence } from "@/app/lib/use-presence";
 import {
   buildPaletteOptions,
   type PaletteItem,
@@ -53,15 +53,20 @@ export function CommandPalette({
     () => true,
     () => false,
   );
+  const {
+    ref: overlayRef,
+    mounted: overlayMounted,
+    state: overlayState,
+  } = usePresence<HTMLDivElement>(open);
 
   const { routes, posts, flat } = buildPaletteOptions(query);
 
-  useScrollLock(open);
-  useFocusTrap(open, panelRef);
+  useScrollLock(overlayMounted);
+  useFocusTrap(overlayMounted, panelRef);
 
   function close({ restoreFocus = false } = {}) {
     setQuery("");
-    runViewTransition(() => onClose());
+    onClose();
     if (restoreFocus) {
       returnFocusRef?.current?.focus();
     }
@@ -100,7 +105,7 @@ export function CommandPalette({
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
-  if (!open || !canUseDom) {
+  if (!overlayMounted || !canUseDom) {
     return null;
   }
 
@@ -150,7 +155,9 @@ export function CommandPalette({
 
   return createPortal(
     <div
+      ref={overlayRef}
       className={styles.overlay}
+      data-state={overlayState}
       data-animate={animateEnter}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {

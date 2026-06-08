@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { useRef, useState } from "react";
 import { CommandPalette } from "../command-palette";
@@ -11,6 +11,12 @@ const { push } = vi.hoisted(() => ({ push: vi.fn() }));
 vi.mock("@/app/lib/use-transition-router", () => ({
   useTransitionRouter: () => ({ push }),
 }));
+
+async function flushExit() {
+  await act(async () => {
+    await Promise.resolve();
+  });
+}
 
 function Harness({
   initiallyOpen = true,
@@ -93,29 +99,32 @@ describe("CommandPalette", () => {
     expect(screen.queryByText("Blog posts")).not.toBeInTheDocument();
   });
 
-  it("closes on Escape and restores focus to the trigger", () => {
+  it("closes on Escape and restores focus to the trigger", async () => {
     render(<Harness withReturnFocus />);
 
     fireEvent.keyDown(screen.getByRole("combobox"), { key: "Escape" });
+    await flushExit();
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Menu" })).toHaveFocus();
   });
 
-  it("closes on backdrop interaction and restores focus to the trigger", () => {
+  it("closes on backdrop interaction and restores focus to the trigger", async () => {
     render(<Harness withReturnFocus />);
 
     const overlay = screen.getByRole("dialog").parentElement as HTMLElement;
     fireEvent.mouseDown(overlay);
+    await flushExit();
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Menu" })).toHaveFocus();
   });
 
-  it("closes via the close button and restores focus to the trigger", () => {
+  it("closes via the close button and restores focus to the trigger", async () => {
     render(<Harness withReturnFocus />);
 
     fireEvent.click(screen.getByRole("button", { name: "Close menu" }));
+    await flushExit();
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Menu" })).toHaveFocus();

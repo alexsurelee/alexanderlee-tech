@@ -41,7 +41,7 @@ export function Navbar() {
   }
 
   function closePalette() {
-    runViewTransition(() => setPaletteOpen(false));
+    setPaletteOpen(false);
   }
 
   return (

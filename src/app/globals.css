@@ -237,7 +237,7 @@ pre code {
 /* Motion + view transitions (Phase 5) */
 
 :root {
-    --duration-exit: 120ms;
+    --duration-exit: 80ms;
     --duration-enter: 160ms;
     --duration-move: 200ms;
     --duration-panel: 140ms;
@@ -272,7 +272,7 @@ html[data-nav-transition="nav-forward"] ::view-transition-old(page-content) {
     --slide-offset: -28px;
     animation:
         var(--duration-exit) ease-in both fade-in reverse,
-        var(--duration-move) ease-in both slide reverse;
+        var(--duration-exit) ease-in both slide reverse;
 }
 
 html[data-nav-transition="nav-forward"] ::view-transition-new(page-content) {
@@ -286,7 +286,7 @@ html[data-nav-transition="nav-back"] ::view-transition-old(page-content) {
     --slide-offset: 28px;
     animation:
         var(--duration-exit) ease-in both fade-in reverse,
-        var(--duration-move) ease-in both slide reverse;
+        var(--duration-exit) ease-in both slide reverse;
 }
 
 html[data-nav-transition="nav-back"] ::view-transition-new(page-content) {
