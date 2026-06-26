@@ -1,0 +1,48 @@
+---
+description: Wide-event logging — one context-rich event per request, not scattered log lines
+globs: "**/*.{ts,tsx,js,mjs}"
+alwaysApply: false
+---
+
+# Wide Events (Canonical Log Lines)
+
+Source: [loggingsucks.com](https://loggingsucks.com/)
+
+## Mental model
+
+Log **what happened to this request**, not what your code is doing. Emit **one wide event per request per service** at the end of the lifecycle — not 10+ scattered lines.
+
+Structured JSON is table stakes. Wide events are a philosophy: high **cardinality** (user IDs, request IDs) and high **dimensionality** (many queryable fields).
+
+## Build once, emit once
+
+Initialize context at request start; enrich in handlers; emit in `finally`:
+
+```typescript
+// ❌ BAD — scattered, unqueryable
+console.log("Payment failed");
+logger.info(`Processing user ${userId}`);
+
+// ✅ GOOD — one authoritative record
+event.user = { id: user.id, subscription: user.subscription };
+event.payment = { provider: "stripe", latency_ms: 1089, attempt: 3 };
+event.error = { type: "PaymentError", code: "card_declined", retriable: false };
+logger.info(event); // emit once in finally
+```
+
+Include: `request_id`, `trace_id`, service/version/deployment, HTTP method/path/status, `duration_ms`, user + business context (cart, feature flags), and structured errors.
+
+## Querying, not grepping
+
+Fields must be consistent key names (`user_id`, not `user-123` in prose). Design logs for the 2am search: "checkout failures for premium users with new_checkout_flow enabled."
+
+## OpenTelemetry
+
+OTel is a delivery mechanism. It does not decide what to capture — instrument deliberately with business context. Ideally, wide events are enriched trace spans.
+
+## Sampling at scale
+
+Use **tail sampling** after the request completes:
+
+- Always keep: errors (5xx, exceptions), slow requests (above p99), VIP/flagged users
+- Random-sample the rest (1–5%)
