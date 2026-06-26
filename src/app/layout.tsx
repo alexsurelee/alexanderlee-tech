@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { clsx } from "clsx";
 import { AppHotkeysProvider } from "@/app/components/hotkeys-provider";
-import { atkinson, monaspace } from "./fonts";
+import { atkinson } from "./fonts";
 
 export const metadata: Metadata = {
   title: "Alexander Lee",
@@ -16,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={clsx(atkinson.variable, monaspace.variable)}>
+    <html lang="en" className={atkinson.variable}>
       <body>
         <AppHotkeysProvider>{children}</AppHotkeysProvider>
       </body>

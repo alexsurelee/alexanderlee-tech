@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
+    environmentMatchGlobs: [["scripts/**", "node"]],
     globals: false,
     setupFiles: ["./vitest-setup.ts"],
   },

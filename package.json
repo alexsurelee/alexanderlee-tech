@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "fetch-fonts": "node scripts/fetch-berkeley-mono.mjs",
+    "build": "pnpm fetch-fonts && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "pnpm fetch-fonts && storybook build",
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
+    "@vercel/blob": "^2.3.0",
     "@storybook/addon-a11y": "^10.4.2",
     "@storybook/addon-docs": "^10.4.2",
     "@storybook/nextjs-vite": "^10.4.2",
