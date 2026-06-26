@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-As a visitor to alexanderlee.tech, today there is no real site navigation. The
+As a visitor to lee.computer, today there is no real site navigation. The
 "navbar" is just a logo that links home, embedded inside the base layout. There
 is no way to reach a blog or a "uses" page, and there is no way to search
 writing. As the site grows, I want a navbar that:
@@ -35,7 +35,7 @@ That one primitive powers two surfaces:
 2. **Command-palette navigation.** On small viewports the link bar collapses
    into a single trigger that opens a **full-screen command menu**. That menu is
    the same combobox primitive, seeded with the nav routes (Blog, Uses, Home)
-   *and* live blog-post search results, so search is never lost on touch
+   _and_ live blog-post search results, so search is never lost on touch
    devices. On desktop the same palette is also bound to **Cmd/Ctrl-K**.
 
 Blog content is indexed at build time into a static, in-memory search index — no
@@ -232,7 +232,7 @@ results page.
 - Search surfaces follow the ARIA combobox pattern: a text input wired to a
   listbox, active-option highlighting via active-descendant, and a polite live
   announcement of result counts.
-- The Blog item is a real link (navigates to `/blog`) that *also* exposes the
+- The Blog item is a real link (navigates to `/blog`) that _also_ exposes the
   search affordance; the affordance must not break link semantics or keyboard
   activation.
 - The command palette is a modal: focus trap, scroll lock, Escape + backdrop

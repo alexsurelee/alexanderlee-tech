@@ -51,13 +51,15 @@ describe("BaseLayout", () => {
 
     expect(
       screen.getByRole("heading", { level: 1, hidden: true }),
-    ).toHaveTextContent("alexanderlee.tech");
+    ).toHaveTextContent("lee.computer");
   });
 
   it("marks layout gutters as decorative", () => {
     const { container } = render(<BaseLayout>content</BaseLayout>);
 
-    const gutters = [...container.querySelectorAll('[aria-hidden="true"]')].filter(
+    const gutters = [
+      ...container.querySelectorAll('[aria-hidden="true"]'),
+    ].filter(
       (el) =>
         el.className.includes("leftGutter") ||
         el.className.includes("rightGutter"),

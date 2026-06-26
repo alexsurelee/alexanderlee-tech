@@ -70,7 +70,7 @@ describe("Navbar", () => {
     renderNavbar();
 
     const links = screen.getAllByRole("link").map((link) => link.textContent);
-    expect(links[0]).toContain("alexanderlee.tech");
+    expect(links[0]).toContain("lee.computer");
     expect(links.slice(1)).toEqual(navRoutes.map((route) => route.label));
   });
 
@@ -128,7 +128,9 @@ describe("Navbar", () => {
 
     await user.click(screen.getByRole("button", { name: "Menu" }));
 
-    expect(screen.getByRole("dialog", { name: "Command menu" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("dialog", { name: "Command menu" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("Pages")).toBeInTheDocument();
   });
 

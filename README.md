@@ -1,4 +1,4 @@
-# alexanderlee.tech
+# lee.computer
 
 ## Getting Started
 

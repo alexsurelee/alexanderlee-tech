@@ -56,7 +56,7 @@ export function TypewriterTitle({
       {...props}
     >
       <h1 className={styles.title}>
-        <span className={styles.titleText}>alexanderlee.tech</span>
+        <span className={styles.titleText}>lee.computer</span>
       </h1>
     </div>
   );

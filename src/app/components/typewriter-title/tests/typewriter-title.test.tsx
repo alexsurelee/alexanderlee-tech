@@ -23,7 +23,7 @@ describe("TypewriterTitle", () => {
     render(<TypewriterTitle />);
 
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
-      "alexanderlee.tech",
+      "lee.computer",
     );
   });
 
@@ -35,7 +35,7 @@ describe("TypewriterTitle", () => {
     );
   });
 
-  it('persists intro seen flag after animate', async () => {
+  it("persists intro seen flag after animate", async () => {
     render(<TypewriterTitle />);
 
     await waitFor(() => {

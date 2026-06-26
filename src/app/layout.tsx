@@ -5,7 +5,7 @@ import { AppHotkeysProvider } from "@/app/components/hotkeys-provider";
 import { atkinson, monaspace } from "./fonts";
 
 export const metadata: Metadata = {
-  title: "alexanderlee.tech | Alexander Lee",
+  title: "lee.computer | Alexander Lee",
   description: "Writings about software design, technology, and more.",
   icons: "/logo-simple-small.svg",
 };
