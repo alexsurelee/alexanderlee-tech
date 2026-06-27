@@ -14,6 +14,8 @@ import { NAV_WIDE_QUERY } from "@/app/lib/nav-breakpoint";
 import { useMediaQuery } from "@/app/lib/use-media-query";
 import { runViewTransition } from "@/app/lib/run-view-transition";
 import styles from "./navbar.module.css";
+import { Text } from "../text/text";
+import { Title } from "../text/title";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -54,11 +56,11 @@ export function Navbar() {
         <Image
           src="/logo-small.svg"
           loading="eager"
-          width="50"
-          height={"50"}
-          alt={"Home"}
+          width="75"
+          height="75"
+          alt=""
         />
-        <TypewriterTitle aria-hidden={true} />
+        <Title font="mono">lee.computer</Title>
       </Link>
 
       <button

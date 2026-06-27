@@ -1,0 +1,19 @@
+.sans {
+  font-family: var(--font-sans), sans-serif;
+}
+
+.mono {
+  font-family: var(--font-mono), monospace;
+}
+
+.xlarge {
+  font-size: var(--text-xlarge);
+}
+
+.large {
+  font-size: var(--text-large);
+}
+
+.medium {
+  font-size: var(--text-medium);
+}
