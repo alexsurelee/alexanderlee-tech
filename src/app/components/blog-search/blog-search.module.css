@@ -1,48 +1,38 @@
 .root {
-    position: relative;
-    display: inline-flex;
+  position: relative;
+  display: inline-flex;
 }
 
 .link {
-    color: inherit;
-    text-decoration: none;
-    text-underline-offset: 0.25em;
-}
-
-.link:hover {
-    text-decoration: underline;
-}
-
-.link[data-current] {
-    text-decoration: underline;
+  display: inline-block;
 }
 
 .panel {
-    position: absolute;
-    top: calc(100% + var(--space-xs));
-    /* Anchor to the trigger's right edge so the panel expands leftward and stays
+  position: absolute;
+  top: calc(100% + var(--space-xs));
+  /* Anchor to the trigger's right edge so the panel expands leftward and stays
        on screen — the Blog item sits in the right-aligned nav cluster. */
-    right: 0;
-    left: auto;
-    z-index: 50;
-    width: min(22rem, calc(100vw - 2 * var(--space-md)));
-    padding: var(--space-sm);
-    background-color: var(--color-bg);
-    border: var(--border-width) solid var(--border-default);
-    border-radius: 0.75rem;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
-    /* Anchored to the Blog trigger at the panel's top-right corner, so it grows
+  right: 0;
+  left: auto;
+  z-index: 50;
+  width: min(22rem, calc(100vw - 2 * var(--space-md)));
+  padding: var(--space-sm);
+  background-color: var(--color-bg);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  /* Anchored to the Blog trigger at the panel's top-right corner, so it grows
        out of / collapses back into the button. */
-    transform-origin: top right;
+  transform-origin: top right;
 }
 
 .panel[data-state="open"] {
-    animation: panel-in var(--duration-panel) var(--ease-out-cubic) both;
+  animation: panel-in var(--duration-panel) var(--ease-out-cubic) both;
 }
 
 .panel[data-state="closing"] {
-    pointer-events: none;
-    animation: panel-out var(--duration-exit) var(--ease-in-cubic) both;
+  pointer-events: none;
+  animation: panel-out var(--duration-exit) var(--ease-in-cubic) both;
 }
 
 /* Keyframes must live in this module so CSS Modules scopes both the definition
@@ -51,45 +41,45 @@
    and `animationend` never fires (leaving the panel stuck mounted). Distinct
    in/out names also guarantee toggling data-state restarts the animation. */
 @keyframes panel-in {
-    from {
-        opacity: 0;
-        transform: scale(0.92);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
 
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes panel-out {
-    from {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-    to {
-        opacity: 0;
-        transform: scale(0.92);
-    }
+  to {
+    opacity: 0;
+    transform: scale(0.92);
+  }
 }
 
 /* Bridges the visual gap above the panel so moving the pointer from the trigger
    into the panel stays within the hover surface and doesn't trip pointerleave. */
 .panel::before {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    height: var(--space-xs);
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: var(--space-xs);
 }
 
 .optionTitle {
-    display: block;
+  display: block;
 }
 
 .optionHint {
-    display: block;
-    opacity: 0.7;
+  display: block;
+  opacity: 0.7;
 }

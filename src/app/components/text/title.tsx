@@ -1,22 +1,39 @@
 import styles from "./text.module.css";
 import clsx from "clsx";
+import type { ComponentPropsWithoutRef } from "react";
 
-type TitleProps = React.HTMLProps<HTMLHeadingElement> & {
+type TitleSize = "h1" | "h2" | "h3" | "h4";
+
+type TitleProps = {
   font?: "sans" | "mono";
-  TagName?: "h1" | "h2" | "h3" | "h4";
+  size?: TitleSize;
+  TagName?: TitleSize;
+} & ComponentPropsWithoutRef<"h1">;
+
+const sizeClassNames: Record<TitleSize, string> = {
+  h1: styles.h1,
+  h2: styles.h2,
+  h3: styles.h3,
+  h4: styles.h4,
 };
 
 export function Title({
   children,
   font = "sans",
-  TagName = "h1",
+  size = "h1",
+  TagName,
+  className,
   ...props
 }: TitleProps) {
+  const Heading = TagName ?? size;
   const fontClassName = font === "sans" ? styles.sans : styles.mono;
 
   return (
-    <TagName className={clsx(fontClassName)} {...props}>
+    <Heading
+      className={clsx(fontClassName, sizeClassNames[size], className)}
+      {...props}
+    >
       {children}
-    </TagName>
+    </Heading>
   );
 }

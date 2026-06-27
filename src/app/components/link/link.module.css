@@ -1,0 +1,37 @@
+.animatedLink {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.animatedLink::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.15em;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-link-underline) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .animatedLink:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.animatedLink[data-current]::after {
+  transform: scaleX(1);
+}
+
+.animatedLink[data-current] {
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animatedLink::after {
+    transition: none;
+  }
+}

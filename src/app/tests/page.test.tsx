@@ -8,9 +8,11 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("Home", () => {
-  it("renders welcome content in the main landmark", () => {
+  it("renders welcome content as the page heading", () => {
     render(<Page />);
 
-    expect(screen.getByRole("main")).toHaveTextContent("Welcome👋");
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Welcome👋" }),
+    ).toBeInTheDocument();
   });
 });

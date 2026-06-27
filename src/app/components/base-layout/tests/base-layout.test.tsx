@@ -40,30 +40,38 @@ describe("BaseLayout", () => {
   it("renders the logo in the home link", () => {
     render(<BaseLayout>content</BaseLayout>);
 
-    expect(screen.getByRole("img", { name: "Home" })).toHaveAttribute(
+    const homeLink = screen.getByRole("link", { name: "Home" });
+    const logo = homeLink.querySelector("img");
+
+    expect(logo).toHaveAttribute(
       "src",
       expect.stringContaining("logo-small.svg"),
     );
   });
 
-  it("renders the site title as a decorative heading", () => {
+  it("renders the site name in the home link", () => {
     render(<BaseLayout>content</BaseLayout>);
 
-    expect(
-      screen.getByRole("heading", { level: 1, hidden: true }),
-    ).toHaveTextContent("lee.computer");
+    expect(screen.getByRole("link", { name: "Home" })).toHaveTextContent(
+      "lee.computer",
+    );
   });
 
-  it("marks layout gutters as decorative", () => {
+  it("renders no gutters by default", () => {
     const { container } = render(<BaseLayout>content</BaseLayout>);
 
-    const gutters = [
-      ...container.querySelectorAll('[aria-hidden="true"]'),
-    ].filter(
-      (el) =>
-        el.className.includes("leftGutter") ||
-        el.className.includes("rightGutter"),
+    expect(container.querySelector('[class*="leftGutter"]')).toBeNull();
+    expect(container.querySelector('[class*="rightGutter"]')).toBeNull();
+  });
+
+  it("renders gutters when left and right slots are provided", () => {
+    render(
+      <BaseLayout left={<p>Left pane</p>} right={<p>Right pane</p>}>
+        content
+      </BaseLayout>,
     );
-    expect(gutters).toHaveLength(2);
+
+    expect(screen.getByText("Left pane")).toBeInTheDocument();
+    expect(screen.getByText("Right pane")).toBeInTheDocument();
   });
 });

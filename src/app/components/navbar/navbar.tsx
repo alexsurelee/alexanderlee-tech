@@ -6,16 +6,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import clsx from "clsx";
-import { TypewriterTitle } from "@/app/components/typewriter-title";
 import { BlogSearch } from "@/app/components/blog-search";
 import { CommandPalette } from "@/app/components/command-palette";
 import { isRouteActive, navRoutes } from "@/app/lib/routes";
 import { NAV_WIDE_QUERY } from "@/app/lib/nav-breakpoint";
 import { useMediaQuery } from "@/app/lib/use-media-query";
 import { runViewTransition } from "@/app/lib/run-view-transition";
+import linkStyles from "@/app/components/link/link.module.css";
+import textStyles from "@/app/components/text/text.module.css";
 import styles from "./navbar.module.css";
-import { Text } from "../text/text";
-import { Title } from "../text/title";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -52,21 +51,23 @@ export function Navbar() {
       aria-label="Primary"
       data-layout={isWide ? "wide" : "narrow"}
     >
-      <Link href="/" className={styles.homeLink}>
+      <Link href="/" className={styles.homeLink} aria-label="Home">
         <Image
           src="/logo-small.svg"
           loading="eager"
-          width="75"
-          height="75"
+          width="40"
+          height="40"
           alt=""
         />
-        <Title font="mono">lee.computer</Title>
+        <span className={clsx(textStyles.mono, styles.siteTitle)}>
+          lee.computer
+        </span>
       </Link>
 
       <button
         ref={menuTriggerRef}
         type="button"
-        className={styles.menuTrigger}
+        className={clsx("navLink", styles.menuTrigger)}
         aria-haspopup="dialog"
         aria-expanded={paletteOpen}
         aria-controls={paletteOpen ? "command-menu" : undefined}
@@ -85,7 +86,11 @@ export function Navbar() {
               ) : (
                 <Link
                   href={route.href}
-                  className={clsx("navLink", styles.link)}
+                  className={clsx(
+                    "navLink",
+                    linkStyles.animatedLink,
+                    styles.link,
+                  )}
                   data-current={current ? "" : undefined}
                   aria-current={current ? "page" : undefined}
                 >

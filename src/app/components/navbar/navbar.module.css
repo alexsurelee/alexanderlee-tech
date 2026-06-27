@@ -1,77 +1,68 @@
 .nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: clamp(1rem, 4vw, 2.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1rem, 4vw, 2.5rem);
 }
 
 .homeLink {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: inherit;
-    text-decoration: none;
-    min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.siteTitle {
+  font-size: var(--text-site-title);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 .homeLink:focus-visible {
-    outline-offset: 4px;
+  outline-offset: 4px;
 }
 
 .menuTrigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-xs) var(--space-md);
-    color: inherit;
-    background: transparent;
-    border: var(--border-width) solid var(--border-default);
-    border-radius: 0.5rem;
-    font-size: var(--text-nav);
-    font-weight: 500;
-    cursor: pointer;
-    flex-shrink: 0;
-}
-
-.menuTrigger:focus-visible {
-    border-color: var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .links {
-    display: none;
-    align-items: center;
-    gap: clamp(0.75rem, 3vw, 1.75rem);
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  display: none;
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 1.75rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 @media (min-width: 48rem) {
-    .menuTrigger {
-        display: none;
-    }
+  .menuTrigger {
+    display: none;
+  }
 
-    .links {
-        display: flex;
-    }
+  .links {
+    display: flex;
+  }
 }
 
 .link {
-    color: inherit;
-    text-decoration: none;
-    text-underline-offset: 0.25em;
-}
-
-.link:hover {
-    text-decoration: underline;
-}
-
-.link[data-current] {
-    text-decoration: underline;
+  display: inline-block;
 }
 
 .link:focus-visible,
 .menuTrigger:focus-visible {
-    outline: 2px solid var(--border-strong);
-    outline-offset: 4px;
+  outline: 2px solid var(--border-strong);
+  outline-offset: 4px;
 }

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { BaseLayout } from "@/app/components/base-layout/base-layout";
+import { Title } from "@/app/components/text/title";
 import { formatPostDate, getPost, posts } from "@/app/lib/posts";
 import styles from "./post.module.css";
 
@@ -22,7 +23,7 @@ export default async function BlogPostPage({
   return (
     <BaseLayout>
       <article className={styles.post}>
-        <h1>{post.title}</h1>
+        <Title>{post.title}</Title>
         <div className={styles.metaRow}>
           <span className="meta">
             <time dateTime={post.date}>{formatPostDate(post.date)}</time>

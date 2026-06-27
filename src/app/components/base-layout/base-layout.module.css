@@ -1,46 +1,80 @@
 .layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
 }
 
 .header {
-    padding: 1.5rem clamp(1.25rem, 4vw, 2.5rem);
-    border-bottom: var(--border-width) solid var(--border-subtle);
-    view-transition-name: site-header;
+  border-bottom: var(--border-width) solid var(--border-subtle);
+  view-transition-name: site-header;
+}
+
+.headerInner {
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding: 0.875rem var(--content-inline-padding);
 }
 
 .body {
-    display: grid;
-    flex: 1;
-    grid-template-columns: var(--layout-gutter-width) 1fr var(--layout-gutter-width);
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.body[data-has-left],
+.body[data-has-right] {
+  display: grid;
+  justify-content: stretch;
+}
+
+.body[data-has-left][data-has-right] {
+  grid-template-columns: 1fr min(var(--content-max-width), 100%) 1fr;
+}
+
+.body[data-has-left]:not([data-has-right]) {
+  grid-template-columns: minmax(var(--layout-side-min), 1fr) min(
+      var(--content-max-width),
+      100%
+    );
+}
+
+.body[data-has-right]:not([data-has-left]) {
+  grid-template-columns: min(var(--content-max-width), 100%) minmax(
+      var(--layout-side-min),
+      1fr
+    );
 }
 
 .leftGutter {
-    border-right: var(--border-width) solid var(--border-subtle);
+  border-right: var(--border-width) solid var(--border-subtle);
+  padding: var(--space-lg) var(--content-inline-padding);
 }
 
 .rightGutter {
-    border-left: var(--border-width) solid var(--border-subtle);
+  border-left: var(--border-width) solid var(--border-subtle);
+  padding: var(--space-lg) var(--content-inline-padding);
 }
 
 .main {
-    padding: 4rem clamp(1.5rem, 5vw, 4rem) 3rem;
-    max-width: 65ch;
-    view-transition-name: page-content;
+  width: 100%;
+  max-width: var(--content-max-width);
+  padding: 2.5rem var(--content-inline-padding);
+  view-transition-name: page-content;
 }
 
 @media (max-width: 48rem) {
-    .body {
-        grid-template-columns: 1fr;
-    }
+  .body[data-has-left],
+  .body[data-has-right] {
+    grid-template-columns: 1fr;
+  }
 
-    .leftGutter, .rightGutter {
-        display: none;
-    }
+  .leftGutter,
+  .rightGutter {
+    display: none;
+  }
 
-    .main {
-        padding-top: 2.5rem;
-        max-width: none;
-    }
+  .main {
+    padding-top: 2.5rem;
+    max-width: none;
+  }
 }

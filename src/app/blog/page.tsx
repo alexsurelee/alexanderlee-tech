@@ -1,6 +1,9 @@
 import { TransitionLink } from "@/app/components/transition-link";
 import { BaseLayout } from "@/app/components/base-layout/base-layout";
+import linkStyles from "@/app/components/link/link.module.css";
+import { Title } from "@/app/components/text/title";
 import { formatPostDate, searchPosts } from "@/app/lib/posts";
+import clsx from "clsx";
 import styles from "./blog.module.css";
 
 function firstParam(value: string | string[] | undefined): string {
@@ -22,7 +25,7 @@ export default async function BlogPage({
 
   return (
     <BaseLayout>
-      <h1>Blog</h1>
+      <Title>Blog</Title>
       {trimmed ? (
         <p className={styles.summary}>
           {results.length} result{results.length === 1 ? "" : "s"} for{" "}
@@ -32,8 +35,8 @@ export default async function BlogPage({
 
       {results.length === 0 ? (
         <p className={styles.empty} role="status">
-          No posts match <span className={styles.query}>“{trimmed}”</span>. Try a
-          different search.
+          No posts match <span className={styles.query}>“{trimmed}”</span>. Try
+          a different search.
         </p>
       ) : (
         <ul className={styles.list}>
@@ -41,9 +44,11 @@ export default async function BlogPage({
             <li key={post.slug} className={styles.item}>
               <TransitionLink
                 href={`/blog/${post.slug}`}
-                className={styles.postLink}
+                className={clsx(linkStyles.animatedLink, styles.postLink)}
               >
-                <h2 className={styles.title}>{post.title}</h2>
+                <Title TagName="h2" size="h2">
+                  {post.title}
+                </Title>
               </TransitionLink>
               <p>{post.summary}</p>
               <div className={styles.metaRow}>

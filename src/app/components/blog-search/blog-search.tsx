@@ -8,6 +8,7 @@ import { Combobox, type ComboboxOption } from "@/app/components/combobox";
 import { useOpenIntent } from "@/app/lib/use-open-intent";
 import { usePresence } from "@/app/lib/use-presence";
 import { formatPostDate, searchPosts, type Post } from "@/app/lib/posts";
+import linkStyles from "@/app/components/link/link.module.css";
 import styles from "./blog-search.module.css";
 
 function toOptions(posts: Post[]): ComboboxOption<Post>[] {
@@ -121,7 +122,7 @@ export function BlogSearch({ current }: { current: boolean }) {
       <Link
         ref={linkRef}
         href="/blog"
-        className={clsx("navLink", styles.link)}
+        className={clsx("navLink", linkStyles.animatedLink, styles.link)}
         data-current={current ? "" : undefined}
         aria-current={current ? "page" : undefined}
         onFocus={handlers.onFocus}
