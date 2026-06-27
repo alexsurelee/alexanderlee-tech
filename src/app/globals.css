@@ -195,14 +195,15 @@ pre code {
   --text-code: 0.9375rem;
 
   /* Colours */
-  --color-naples-yellow: #faed8f; /* device-cmyk(2%, 7%, 44%, 0%) */
-  --color-peach-red: #ff3319; /* device-cmyk(0%, 80%, 90%, 0%) */
-  --color-neutral-gray: #b5d1cc; /* device-cmyk(29%, 18%, 20%, 0%) */
-  --color-deep-slate-olive: #172713; /* device-cmyk(76%, 60%, 80%, 62%) */
+  --color-white-smoke: #f6f5f3;
+  --color-rust-brown: #a44200;
+  --color-coffee-bean: #1c1018;
+  --color-forest-green: #4d8b31;
+  --color-baltic-blue: #3c6997;
 
   /* Surfaces */
-  --color-bg: #fff;
-  --color-fg: #000;
+  --color-bg: var(--color-white-smoke);
+  --color-fg: var(--color-coffee-bean);
 
   /* Spacing scale */
   --space-2xs: 0.25rem;
