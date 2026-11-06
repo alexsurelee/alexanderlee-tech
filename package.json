@@ -1,5 +1,9 @@
 {
   "name": "alexanderlee-tech",
+  "description": "Alexander Lee’s personal website and blog at alexanderlee.tech",
+  "homepage": "https://alexanderlee.tech",
+  "author": "Alexander Lee",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
   "engines": {

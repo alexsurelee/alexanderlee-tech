@@ -1,58 +1,32 @@
-# Astro Starter Kit: Blog
+# Alexander Lee
 
-```sh
-pnpm create astro@latest -- --template blog
-```
+Alexander Lee’s personal website, primarily a blog, at [alexanderlee.tech](https://alexanderlee.tech).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Built with Astro, with Markdown and MDX posts, RSS, and a sitemap.
 
-Features:
+## Development
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+Use Node.js 22.23.4 or newer and pnpm. Run commands from the project root.
 
-## 🚀 Project Structure
+| Command | Action |
+| :--- | :--- |
+| `pnpm install` | Install dependencies |
+| `pnpm astro dev --background` | Start the background development server |
+| `pnpm astro dev status` | Check the server status |
+| `pnpm astro dev logs` | Read server logs |
+| `pnpm astro dev stop` | Stop the server |
+| `pnpm typecheck` | Check Astro and TypeScript files |
+| `pnpm build` | Build the site to `dist/` |
+| `pnpm preview` | Preview the production build |
 
-Inside of your Astro project, you'll see the following folders and files:
+Work directly on `main`. Run `pnpm typecheck` and inspect IDE diagnostics before committing and pushing changes.
 
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
+## Content and metadata
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+- Blog posts live in `src/content/blog/`. The included starter posts are sample content to replace before launch.
+- Pages live in `src/pages/`.
+- Shared site title and description live in `src/consts.ts`.
+- The production URL is configured in `astro.config.mjs` and used for canonical URLs, RSS, and the sitemap.
 
 ## Storybook
 
@@ -67,10 +41,6 @@ This project uses the [community Astro framework](https://github.com/storybook-a
 Astro stories in static builds are pre-rendered; use the development server to
 preview changes to args with Controls.
 
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
 ## Credit
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Started from the Astro blog template, whose theme is based on [Bear Blog](https://github.com/HermanMartinus/bearblog/).
