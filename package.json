@@ -14,6 +14,7 @@
     "dev": "astro dev",
     "typecheck": "astro check",
     "build": "astro build",
+    "deploy": "pnpm dlx wrangler deploy --assets ./dist --name alexanderlee-tech --compatibility-date 2026-11-04",
     "preview": "astro preview",
     "astro": "astro",
     "storybook": "storybook dev -p 6006",
