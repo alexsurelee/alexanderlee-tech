@@ -1,8 +1,17 @@
 ## Development
 
-We practice true continuous integration: work directly on `main`, commit small
-changes frequently, and push straight to `main` after the required checks pass.
-Do not create feature branches or use a pull request workflow.
+We practice true continuous integration: work directly on `main` and commit small
+changes frequently. Do not create feature branches or use a pull request workflow.
+
+Push straight to `main` after the required checks pass. By default, ask before
+pushing unless the user has explicitly authorized pushing the current changes.
+Use pragmatic judgment: small, low-risk documentation updates, formatting changes,
+and tiny bug fixes may be pushed automatically. Keep this exception narrow; ask
+before pushing broader changes, features, or changes with meaningful risk or
+user-visible impact. Do not bundle changes requiring approval into an automatic
+push. Continuous integration and permission to edit or commit do not otherwise
+imply permission to push, and authorization for one push does not carry over to
+subsequent pushes.
 
 When starting the dev server, use background mode:
 
