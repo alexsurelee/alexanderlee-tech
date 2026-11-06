@@ -54,6 +54,19 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `pnpm astro -- --help` | Get help using the Astro CLI                     |
 
+## Storybook
+
+Run `pnpm storybook` to browse component stories at `http://localhost:6006`.
+Run `pnpm build-storybook` to generate a static Storybook in `storybook-static/`.
+
+Stories live alongside components as `src/components/*.stories.js`. The preview
+loads the site's global styles and fonts, and serves assets from `public/`.
+The initial stories cover `FormattedDate` and `Footer`.
+
+This project uses the [community Astro framework](https://github.com/storybook-astro/storybook-astro).
+Astro stories in static builds are pre-rendered; use the development server to
+preview changes to args with Controls.
+
 ## 👀 Want to learn more?
 
 Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

@@ -1,0 +1,6 @@
+allowBuilds:
+  esbuild: true
+
+overrides:
+  # astro2tsx uses emnapi core 1.x, which is incompatible with runtime 2.x betas.
+  '@napi-rs/wasm-runtime@1.2.4>@emnapi/runtime': 1.11.3

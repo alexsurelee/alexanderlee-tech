@@ -1,0 +1,12 @@
+import type { StorybookConfig } from '@storybook-astro/framework';
+
+const config: StorybookConfig = {
+	stories: ['../src/**/*.stories.@(js|ts)'],
+	staticDirs: ['../public'],
+	framework: {
+		name: '@storybook-astro/framework',
+		options: {},
+	},
+};
+
+export default config;
