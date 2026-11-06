@@ -7,6 +7,9 @@ Built with Astro, with Markdown and MDX posts, RSS, and a sitemap.
 ## Development
 
 Use Node.js 22.23.4 or newer and pnpm. Run commands from the project root.
+Use pnpm for all dependency management and project commands, and commit changes
+to `pnpm-lock.yaml` when dependencies change. Do not introduce other package
+manager lockfiles.
 
 | Command | Action |
 | :--- | :--- |

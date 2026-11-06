@@ -1,5 +1,10 @@
 ## Development
 
+Use pnpm for dependency management and project commands. Use `pnpm install` to
+install dependencies, `pnpm <script>` to run package scripts, and `pnpm exec <tool>`
+for local binaries. Keep `pnpm-lock.yaml` updated when dependencies change; do not
+introduce lockfiles from other package managers.
+
 We practice true continuous integration: work directly on `main` and commit small
 changes frequently. Do not create feature branches or use a pull request workflow.
 
@@ -16,10 +21,10 @@ subsequent pushes.
 When starting the dev server, use background mode:
 
 ```
-astro dev --background
+pnpm astro dev --background
 ```
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+Manage the background server with `pnpm astro dev stop`, `pnpm astro dev status`, and `pnpm astro dev logs`.
 
 Run `pnpm typecheck` after code or configuration changes as part of the development
 loop, and fix reported errors before considering the work complete. This checks
