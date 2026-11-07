@@ -5,7 +5,12 @@ import { fileURLToPath } from 'node:url';
 
 export const fontDirectory = new URL('../src/assets/fonts/berkeley-mono/', import.meta.url);
 
-export function fontCredentials(env) {
+interface FontFile {
+	file: string;
+	sha256: string;
+}
+
+export function fontCredentials(env: Record<string, string | undefined>) {
 	return {
 		account: env.FONT_R2_ACCOUNT_ID || env.CLOUDFLARE_ACCOUNT_ID,
 		token: env.FONT_R2_API_TOKEN || env.CLOUDFLARE_API_TOKEN,
@@ -19,13 +24,13 @@ export const fontFiles = [
 	{ file: 'BerkeleyMono-Bold-Oblique.woff2', weight: 700, style: 'oblique', sha256: 'd2783fb3b84efbf4e0aa9572a016d010b2ec60657effcf92fe4379fbf129ea0d' },
 ];
 
-function validateFont(bytes, font) {
+function validateFont(bytes: Buffer, font: FontFile): void {
 	if (bytes.subarray(0, 4).toString() !== 'wOF2' || createHash('sha256').update(bytes).digest('hex') !== font.sha256) {
 		throw new Error(`Invalid font: ${font.file} (expected original licensed WOFF2 file)`);
 	}
 }
 
-export function checkFonts(directory, files = fontFiles, required = false) {
+export function checkFonts(directory: string | URL, files: readonly FontFile[] = fontFiles, required = false): boolean {
 	const paths = files.map(font => join(directory instanceof URL ? fileURLToPath(directory) : directory, font.file));
 	if (!paths.every(path => existsSync(path))) {
 		if (required || paths.some(path => existsSync(path))) throw new Error('Missing licensed fonts. Run pnpm fonts:download.');
@@ -35,7 +40,11 @@ export function checkFonts(directory, files = fontFiles, required = false) {
 	return true;
 }
 
-export async function downloadFonts(directory, files, getObject) {
+export async function downloadFonts(
+	directory: string | URL,
+	files: readonly FontFile[],
+	getObject: (file: string) => Promise<Uint8Array>,
+): Promise<void> {
 	const downloads = await Promise.all(files.map(async font => {
 		const bytes = Buffer.from(await getObject(font.file));
 		validateFont(bytes, font);

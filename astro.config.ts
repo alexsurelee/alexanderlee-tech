@@ -1,9 +1,7 @@
-// @ts-check
-
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
-import { checkFonts, fontDirectory } from './scripts/fonts.mjs';
+import { checkFonts, fontDirectory } from './scripts/fonts.ts';
 
 const hasBerkeleyMono = checkFonts(fontDirectory, undefined, process.env.REQUIRE_LICENSED_FONTS === '1');
 

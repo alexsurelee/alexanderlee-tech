@@ -1,4 +1,4 @@
-import { downloadFonts, fontCredentials, fontDirectory, fontFiles } from './fonts.mjs';
+import { downloadFonts, fontCredentials, fontDirectory, fontFiles } from './fonts.ts';
 
 const { account, token } = fontCredentials(process.env);
 const bucket = process.env.FONT_R2_BUCKET || 'alexanderlee-tech-fonts';

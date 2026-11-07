@@ -34,7 +34,7 @@ this bucket or publish the fonts as repository/release artifacts.
 Local checkouts without the files use the included Atkinson font. License holders
 can copy their files into `src/assets/fonts/berkeley-mono/` (ignored by Git), or
 download them with `pnpm fonts:download`. All four files must be present and match
-the SHA-256 checksums in `scripts/fonts.mjs`.
+the SHA-256 checksums in `scripts/fonts.ts`.
 
 The downloader can reuse `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` if
 available in the build environment. The existing token needs Workers R2 Storage
@@ -69,7 +69,7 @@ Run `pnpm test:fonts` to check fallback and download validation behavior.
 - Blog posts live in `src/content/blog/`. The included starter posts are sample content to replace before launch.
 - Pages live in `src/pages/`.
 - Shared site title and description live in `src/consts.ts`.
-- The production URL is configured in `astro.config.mjs` and used for canonical URLs, RSS, and the sitemap.
+- The production URL is configured in `astro.config.ts` and used for canonical URLs, RSS, and the sitemap.
 
 ## Storybook
 

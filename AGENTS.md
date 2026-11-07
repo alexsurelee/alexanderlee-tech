@@ -1,5 +1,8 @@
 ## Development
 
+Use TypeScript for new code, configuration, scripts, and tests. Do not introduce
+JavaScript files.
+
 Use pnpm for dependency management and project commands. Use `pnpm install` to
 install dependencies, `pnpm <script>` to run package scripts, and `pnpm exec <tool>`
 for local binaries. Keep `pnpm-lock.yaml` updated when dependencies change; do not
