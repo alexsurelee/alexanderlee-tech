@@ -26,23 +26,8 @@ Work directly on `main`. Run `pnpm typecheck` and inspect IDE diagnostics before
 
 ## Licensed fonts
 
-Berkeley Mono is served directly from the R2 bucket `alexanderlee-tech-fonts`
-through `https://fonts.alexanderlee.tech/berkeley-mono/v1/`. The licensed WOFF2
-files are never committed to Git. Builds require no font downloads or credentials.
-The font faces live in `src/styles/global.css`; `BaseHead.astro` preloads the
-regular face. System monospace fonts provide the fallback when offline.
-
-Cloudflare caches the versioned fonts for one year at the edge and in browsers.
-Upload changed fonts under a new version directory and update the CSS URLs,
-preload URL, and cache rule's version path. Do not overwrite a published version. The cache rule applies
-only to this font hostname and version path, and excludes caching error responses.
-
-The bucket uses Standard storage and a custom domain, with the `r2.dev` endpoint
-turned off. CORS permits read requests from the production site and localhost
-on ports 4321 (Astro) and 6006 (Storybook). CORS controls browser use; the font URLs
-are publicly readable. Cache misses read from R2 and count toward its free
-allowance; this setup does not enforce a hard spending cap. No paid caching
-features are enabled. Cloudflare's production build command remains `pnpm build`.
+The site uses Berkeley Mono, hosted separately on Cloudflare. Its licensed font
+files are not included in this repository. No font setup is needed to build the site.
 
 ## Content and metadata
 
