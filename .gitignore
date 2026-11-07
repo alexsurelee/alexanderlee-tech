@@ -23,3 +23,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Licensed fonts: downloaded privately for development and deployment
+src/assets/fonts/berkeley-mono/
+**/BerkeleyMono*.woff2

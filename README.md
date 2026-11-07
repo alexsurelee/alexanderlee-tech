@@ -24,6 +24,40 @@ manager lockfiles.
 
 Work directly on `main`. Run `pnpm typecheck` and inspect IDE diagnostics before committing and pushing changes.
 
+## Licensed fonts
+
+The production site uses Berkeley Mono. Its four licensed WOFF2 files are kept
+outside Git in the private R2 bucket `alexanderlee-tech-fonts`, under
+`berkeley-mono/`, with their original filenames. Do not enable public access on
+this bucket or publish the fonts as repository/release artifacts.
+
+Local checkouts without the files use the included Atkinson font. License holders
+can copy their files into `src/assets/fonts/berkeley-mono/` (ignored by Git), or
+download them with `pnpm fonts:download`. All four files must be present and match
+the SHA-256 checksums in `scripts/fonts.mjs`.
+
+For authenticated downloads, set these variables in a local ignored `.env` file
+or in the production build environment:
+
+| Variable | Value |
+| :--- | :--- |
+| `FONT_R2_ACCOUNT_ID` | Cloudflare account ID |
+| `FONT_R2_API_TOKEN` | Secret Cloudflare API bearer token with Workers R2 Storage Read permission for the owning account |
+| `FONT_R2_BUCKET` | Optional; defaults to `alexanderlee-tech-fonts` |
+
+Use a dedicated read-only token; the downloader uses the Cloudflare REST API,
+not S3 access keys. Keep it in build secrets, never client-side variables.
+Production builds must run `pnpm build:production` in place of `pnpm build`.
+This downloads and verifies the fonts before building, and fails if credentials,
+files, or checksums are incorrect. `pnpm deploy` uploads the resulting `dist/`
+using the existing deployment command. Do not expose authenticated build secrets
+to untrusted fork builds. Forks can use `pnpm build` without credentials.
+
+Astro emits the fonts as same-origin static assets with generated filenames.
+The deployed webfonts are necessarily downloadable by browsers; the private
+bucket keeps the source files and build credentials separate from the public repo.
+Run `pnpm test:fonts` to check fallback and download validation behavior.
+
 ## Content and metadata
 
 - Blog posts live in `src/content/blog/`. The included starter posts are sample content to replace before launch.

@@ -17,7 +17,10 @@
 		0 16px 32px rgba(var(--gray), 33%);
 }
 body {
-	font-family: var(--font-atkinson);
+	/* Astro generates this property from the font configuration. */
+	/*noinspection CssUnresolvedCustomProperty*/
+	font-family: var(--font-body, monospace);
+	-webkit-font-smoothing: antialiased;
 	margin: 0;
 	padding: 0;
 	text-align: left;
