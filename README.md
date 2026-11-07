@@ -26,43 +26,23 @@ Work directly on `main`. Run `pnpm typecheck` and inspect IDE diagnostics before
 
 ## Licensed fonts
 
-The production site uses Berkeley Mono. Its four licensed WOFF2 files are kept
-outside Git in the private R2 bucket `alexanderlee-tech-fonts`, under
-`berkeley-mono/`, with their original filenames. Do not enable public access on
-this bucket or publish the fonts as repository/release artifacts.
+Berkeley Mono is served directly from the R2 bucket `alexanderlee-tech-fonts`
+through `https://fonts.alexanderlee.tech/berkeley-mono/v1/`. The licensed WOFF2
+files are never committed to Git. Builds require no font downloads or credentials.
+The font faces live in `src/styles/global.css`; `BaseHead.astro` preloads the
+regular face. System monospace fonts provide the fallback when offline.
 
-Local checkouts without the files use the included Atkinson font. License holders
-can copy their files into `src/assets/fonts/berkeley-mono/` (ignored by Git), or
-download them with `pnpm fonts:download`. All four files must be present and match
-the SHA-256 checksums in `scripts/fonts.ts`.
+Cloudflare caches the versioned fonts for one year at the edge and in browsers.
+Upload changed fonts under a new version directory and update the CSS URLs,
+preload URL, and cache rule's version path. Do not overwrite a published version. The cache rule applies
+only to this font hostname and version path, and excludes caching error responses.
 
-The downloader can reuse `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` if
-available in the build environment. The existing token needs Workers R2 Storage
-Read or Edit permission. No new token is required if it already has access.
-Cloudflare's default Workers Builds token includes R2 Edit permission; verify
-credential availability in the build phase before relying on automatic injection.
-
-Alternatively, set these overrides in a local ignored `.env` file or in the
-production build environment:
-
-| Variable | Value |
-| :--- | :--- |
-| `FONT_R2_ACCOUNT_ID` | Cloudflare account ID |
-| `FONT_R2_API_TOKEN` | Secret Cloudflare API bearer token with Workers R2 Storage Read permission for the owning account |
-| `FONT_R2_BUCKET` | Optional; defaults to `alexanderlee-tech-fonts` |
-
-A dedicated read-only token is optional. The downloader uses the Cloudflare REST
-API, not S3 access keys. Keep tokens in build secrets, never client-side variables.
-Production builds must run `pnpm build:production` in place of `pnpm build`.
-This downloads and verifies the fonts before building, and fails if credentials,
-files, or checksums are incorrect. `pnpm deploy` uploads the resulting `dist/`
-using the existing deployment command. Do not expose authenticated build secrets
-to untrusted fork builds. Forks can use `pnpm build` without credentials.
-
-Astro emits the fonts as same-origin static assets with generated filenames.
-The deployed webfonts are necessarily downloadable by browsers; the private
-bucket keeps the source files and build credentials separate from the public repo.
-Run `pnpm test:fonts` to check fallback and download validation behavior.
+The bucket uses Standard storage and a custom domain, with the `r2.dev` endpoint
+turned off. CORS permits read requests from the production site and localhost
+on ports 4321 (Astro) and 6006 (Storybook). CORS controls browser use; the font URLs
+are publicly readable. Cache misses read from R2 and count toward its free
+allowance; this setup does not enforce a hard spending cap. No paid caching
+features are enabled. Cloudflare's production build command remains `pnpm build`.
 
 ## Content and metadata
 

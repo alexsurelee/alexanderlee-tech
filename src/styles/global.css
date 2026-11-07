@@ -4,7 +4,40 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
+@font-face {
+	font-family: 'Berkeley Mono';
+	src: url('https://fonts.alexanderlee.tech/berkeley-mono/v1/BerkeleyMono-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Berkeley Mono';
+	src: url('https://fonts.alexanderlee.tech/berkeley-mono/v1/BerkeleyMono-Oblique.woff2') format('woff2');
+	font-weight: 400;
+	font-style: oblique;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Berkeley Mono';
+	src: url('https://fonts.alexanderlee.tech/berkeley-mono/v1/BerkeleyMono-Bold.woff2') format('woff2');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Berkeley Mono';
+	src: url('https://fonts.alexanderlee.tech/berkeley-mono/v1/BerkeleyMono-Bold-Oblique.woff2') format('woff2');
+	font-weight: 700;
+	font-style: oblique;
+	font-display: swap;
+}
+
 :root {
+	--font-body: 'Berkeley Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 	--accent: #2337ff;
 	--accent-dark: #000d8a;
 	--black: 15, 18, 25;
@@ -17,8 +50,6 @@
 		0 16px 32px rgba(var(--gray), 33%);
 }
 body {
-	/* Astro generates this property from the font configuration. */
-	/*noinspection CssUnresolvedCustomProperty*/
 	font-family: var(--font-body, monospace);
 	-webkit-font-smoothing: antialiased;
 	margin: 0;
