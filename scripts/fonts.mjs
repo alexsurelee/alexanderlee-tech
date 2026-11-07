@@ -4,6 +4,14 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const fontDirectory = new URL('../src/assets/fonts/berkeley-mono/', import.meta.url);
+
+export function fontCredentials(env) {
+	return {
+		account: env.FONT_R2_ACCOUNT_ID || env.CLOUDFLARE_ACCOUNT_ID,
+		token: env.FONT_R2_API_TOKEN || env.CLOUDFLARE_API_TOKEN,
+	};
+}
+
 export const fontFiles = [
 	{ file: 'BerkeleyMono-Regular.woff2', weight: 400, style: 'normal', sha256: '8b91d4f34790fa02b7886647c9431cd10ac3dadd8c20679874f211e5571f6935' },
 	{ file: 'BerkeleyMono-Oblique.woff2', weight: 400, style: 'oblique', sha256: '36a8282307991368624fb52da2f52157be60bd763fa7e2cc2894d5e5b0b7fe2a' },

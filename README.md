@@ -36,8 +36,14 @@ can copy their files into `src/assets/fonts/berkeley-mono/` (ignored by Git), or
 download them with `pnpm fonts:download`. All four files must be present and match
 the SHA-256 checksums in `scripts/fonts.mjs`.
 
-For authenticated downloads, set these variables in a local ignored `.env` file
-or in the production build environment:
+The downloader can reuse `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` if
+available in the build environment. The existing token needs Workers R2 Storage
+Read or Edit permission. No new token is required if it already has access.
+Cloudflare's default Workers Builds token includes R2 Edit permission; verify
+credential availability in the build phase before relying on automatic injection.
+
+Alternatively, set these overrides in a local ignored `.env` file or in the
+production build environment:
 
 | Variable | Value |
 | :--- | :--- |
@@ -45,8 +51,8 @@ or in the production build environment:
 | `FONT_R2_API_TOKEN` | Secret Cloudflare API bearer token with Workers R2 Storage Read permission for the owning account |
 | `FONT_R2_BUCKET` | Optional; defaults to `alexanderlee-tech-fonts` |
 
-Use a dedicated read-only token; the downloader uses the Cloudflare REST API,
-not S3 access keys. Keep it in build secrets, never client-side variables.
+A dedicated read-only token is optional. The downloader uses the Cloudflare REST
+API, not S3 access keys. Keep tokens in build secrets, never client-side variables.
 Production builds must run `pnpm build:production` in place of `pnpm build`.
 This downloads and verifies the fonts before building, and fails if credentials,
 files, or checksums are incorrect. `pnpm deploy` uploads the resulting `dist/`
