@@ -1,0 +1,12 @@
+---
+// Exercise real Markdown/MDX in development without publishing test content.
+export function getStaticPaths() {
+ return import.meta.env.DEV ? [{ params: { fixture: 'fixture' } }] : [];
+}
+import Fixture from '../../../tests/fixtures/code-blocks.mdx';
+import Markdown from '../../../tests/fixtures/code-blocks.md';
+import BaseHead from '../../components/BaseHead.astro';
+import CodeBehavior from '../../components/code/CodeBehavior.astro';
+import '../../styles/code.css';
+---
+<html lang="en"><head><BaseHead title="Code fixture" description="Integration fixture" /></head><body><main><Markdown /><Fixture /></main><CodeBehavior /></body></html>

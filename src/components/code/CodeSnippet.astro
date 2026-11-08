@@ -1,0 +1,7 @@
+---
+import { toHtml } from 'hast-util-to-html';
+import { renderSnippet } from '../../code/render';
+interface Props { source: string; language?: string; meta?: string }
+const { source, language, meta } = Astro.props;
+---
+<Fragment set:html={toHtml(renderSnippet(source, language, meta))} />

@@ -1,0 +1,5 @@
+---
+interface Props { label?: string; }
+const { label = 'Example files' } = Astro.props;
+---
+<div class="code-group" data-code-group="file" data-label={label}><slot /></div>

@@ -1,0 +1,65 @@
+import FileTabs from '../../src/components/code/FileTabs.astro';
+import LanguageTabs from '../../src/components/code/LanguageTabs.astro';
+
+## Language alternatives
+
+<LanguageTabs default="typescript">
+
+```ts title="TypeScript" highlight="2"
+const greeting: string = 'Hello';
+console.log(greeting);
+```
+
+```py title="Python"
+print('Hello')
+```
+
+</LanguageTabs>
+
+<LanguageTabs default="python">
+
+```typescript
+console.log('Synchronized');
+```
+
+```python
+print('Synchronized')
+```
+
+</LanguageTabs>
+
+<LanguageTabs default="rust">
+
+```json
+{"fallback": true}
+```
+
+```rust
+println!("Fallback stays local");
+```
+
+</LanguageTabs>
+
+<FileTabs>
+
+```ts title="handler-with-a-very-long-filename.ts" diff highlight="3"
+ const greeting = 'Hello';
+-console.log('Old greeting');
++console.log(greeting);
+```
+
+```json title="config.json"
+{"enabled": true}
+```
+
+</FileTabs>
+
+## Wrapping and safe plain text
+
+```ts
+    const url = 'https://example.com/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+```
+
+```unsupported-language
+<script>This must be displayed literally.</script>
+```

@@ -1,0 +1,5 @@
+---
+interface Props { label?: string; default?: string }
+const { label = 'Code language', default: defaultLanguage } = Astro.props;
+---
+<div class="code-group" data-code-group="language" data-default={defaultLanguage} data-label={label}><slot /></div>
