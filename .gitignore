@@ -7,6 +7,10 @@ storybook-static/
 # dependencies
 node_modules/
 
+# downloaded agent skills and generated links; keep skills-lock.json trackable
+/.agents/skills/
+/.claude/skills/
+
 # logs
 npm-debug.log*
 yarn-debug.log*
