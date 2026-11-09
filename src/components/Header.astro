@@ -9,9 +9,18 @@ import HeaderLink from './HeaderLink.astro';
 			<a href="/">{SITE_TITLE}</a>
 		</h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href="/">
+				<span class="tab-highlight" aria-hidden="true"></span>
+				Home
+			</HeaderLink>
+			<HeaderLink href="/blog">
+				<span class="tab-highlight" aria-hidden="true"></span>
+				Blog
+			</HeaderLink>
+			<HeaderLink href="/about">
+				<span class="tab-highlight" aria-hidden="true"></span>
+				About
+			</HeaderLink>
 		</div>
 	</nav>
 </header>
@@ -40,8 +49,10 @@ import HeaderLink from './HeaderLink.astro';
 	h2 { margin: 0; font-family: 'Charter Header', var(--font-body); font-size: 1.25rem; letter-spacing: -0.02em; }
 	h2 a { display: inline-flex; align-items: center; min-height: 44px; }
 	a { color: var(--ink); text-decoration: none; }
-	.internal-links { display: flex; gap: 0.25rem; }
+	.internal-links { display: flex; gap: 0.25rem; view-transition-name: header-labels; }
 	.internal-links :global(a) {
+		position: relative;
+		isolation: isolate;
 		font: 0.75rem/1.5 var(--font-mono);
 		padding: 0.7rem 0.8rem;
 		min-height: 44px;
@@ -50,6 +61,15 @@ import HeaderLink from './HeaderLink.astro';
 	}
 	.internal-links :global(a.active) {
 		color: var(--ink);
+	}
+	.tab-highlight {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: inherit;
+		pointer-events: none;
+	}
+	.internal-links :global(a.active) .tab-highlight {
 		background: var(--highlight);
 		view-transition-name: header-tab;
 	}
@@ -64,7 +84,7 @@ import HeaderLink from './HeaderLink.astro';
 </style>
 
 <style is:global>
-	/* Keep navigation native and animate only the selected header tab. */
+	/* Move the background beneath a stationary snapshot of the tab labels. */
 	@media (prefers-reduced-motion: no-preference) {
 		@view-transition {
 			navigation: auto;
@@ -76,8 +96,21 @@ import HeaderLink from './HeaderLink.astro';
 	}
 
 	::view-transition-group(header-tab) {
+		z-index: 0;
 		animation-duration: 140ms;
 		animation-timing-function: ease-in-out;
+	}
+
+	::view-transition-group(header-labels) {
+		z-index: 1;
+		animation: none;
+	}
+	::view-transition-old(header-labels) {
+		display: none;
+	}
+	::view-transition-new(header-labels) {
+		animation: none;
+		mix-blend-mode: normal;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
