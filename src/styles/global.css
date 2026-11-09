@@ -94,6 +94,24 @@ html {
 	background: var(--paper);
 	scroll-padding-top: 2rem;
 }
+/* Native page crossfades keep navigation and script lifecycles browser-managed. */
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: 300ms;
+		animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none;
+	}
+}
 body {
 	font-family: var(--font-body);
 	-webkit-font-smoothing: antialiased;
