@@ -19,7 +19,7 @@
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
-  font: 14px/1.7 var(--font-body, "Berkeley Mono", monospace);
+  font: 14px/1.7 var(--font-mono, "Berkeley Mono", monospace);
 }
 .code-toolbar {
   display: flex;
