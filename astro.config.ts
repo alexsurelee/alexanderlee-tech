@@ -7,6 +7,7 @@ import remarkCode from "./src/code/markdown.server.ts";
 // https://astro.build/config
 export default defineConfig({
   site: "https://alexanderlee.tech",
+  prefetch: true,
   integrations: [mdx(), sitemap()],
   markdown: {
     syntaxHighlight: false,
