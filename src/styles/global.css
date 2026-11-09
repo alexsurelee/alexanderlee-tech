@@ -95,6 +95,10 @@ html {
 	scroll-padding-top: 2rem;
 }
 /* Native page crossfades keep navigation and script lifecycles browser-managed. */
+:root:active-view-transition {
+	/* Hit testing targets the root while the browser swaps page snapshots. */
+	cursor: pointer;
+}
 @media (prefers-reduced-motion: no-preference) {
 	@view-transition {
 		navigation: auto;

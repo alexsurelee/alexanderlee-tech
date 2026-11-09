@@ -97,12 +97,6 @@ import HeaderLink from './HeaderLink.astro';
 		animation-timing-function: ease-in-out;
 	}
 
-	/* Snapshots replace link hit testing and do not inherit the links' cursor. */
-	::view-transition-group(header-tab),
-	::view-transition-group(header-labels) {
-		cursor: pointer;
-	}
-
 	::view-transition-group(header-labels) {
 		z-index: 1;
 		animation: none;
