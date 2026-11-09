@@ -42,6 +42,7 @@ import HeaderLink from './HeaderLink.astro';
 	.internal-links :global(a.active) {
 		color: var(--ink);
 		background: var(--highlight);
+		view-transition-name: header-tab;
 	}
 	@media (hover: hover) {
 		a:hover, .internal-links :global(a:hover) { color: var(--accent); }
@@ -50,5 +51,31 @@ import HeaderLink from './HeaderLink.astro';
 		header { width: calc(100% - 2.5rem); }
 		nav { align-items: flex-start; flex-direction: column; gap: 0.25rem; }
 		.internal-links { margin-left: -0.8rem; }
+	}
+</style>
+
+<style is:global>
+	/* Keep navigation native and animate only the selected header tab. */
+	@media (prefers-reduced-motion: no-preference) {
+		@view-transition {
+			navigation: auto;
+		}
+	}
+
+	:root {
+		view-transition-name: none;
+	}
+
+	::view-transition-group(header-tab) {
+		animation-duration: 180ms;
+		animation-timing-function: ease-in-out;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		::view-transition-group(header-tab),
+		::view-transition-old(header-tab),
+		::view-transition-new(header-tab) {
+			animation: none;
+		}
 	}
 </style>
