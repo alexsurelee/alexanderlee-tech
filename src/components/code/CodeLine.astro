@@ -1,5 +1,5 @@
 ---
-import type { HighlightedLine } from '../../code/highlight';
+import type { HighlightedLine } from '../../code/snippets.server';
 interface Props { line: HighlightedLine; newline: boolean }
 const { line, newline } = Astro.props;
 const marker = line.kind === 'added' ? '+' : line.kind === 'removed' ? '−' : ' ';

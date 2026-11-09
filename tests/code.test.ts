@@ -1,10 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import {
-  prepareSnippet,
-  normalizeLanguage,
-  selectLanguage,
-} from "../src/code/model.ts";
+import { normalizeLanguage, selectLanguage } from "../src/code/language.ts";
 
 test("copy keeps whitespace and logical lines, diff copy keeps resulting source", () => {
   assert.equal(
@@ -30,7 +26,10 @@ test("language aliases and fallback never replace the preferred language", () =>
   assert.equal(selectLanguage(["json", "py"], "rust"), 0);
 });
 
-import { highlightSnippet } from "../src/code/highlight.ts";
+import {
+  prepareSnippet,
+  highlightSnippet,
+} from "../src/code/snippets.server.ts";
 test("highlighting returns presentation data without owning component markup", () => {
   const snippet = highlightSnippet({
     source: 'const value = "<safe>";\n-old();\n+new();',
@@ -57,7 +56,7 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { toHtml } from "hast-util-to-html";
-import remarkCode from "../src/code/remark-code.ts";
+import remarkCode from "../src/code/markdown.server.ts";
 import { readFile } from "node:fs/promises";
 test("ordinary Markdown fences use the shared renderer through the actual transform", async () => {
   const source = await readFile(
@@ -69,7 +68,7 @@ test("ordinary Markdown fences use the shared renderer through the actual transf
     .use(remarkCode)
     .use(remarkRehype);
   const html = toHtml(await processor.run(processor.parse(source)));
-  const { extractCodeParts } = await import("../src/code/snippets.ts");
+  const { extractCodeParts } = await import("../src/code/markdown.server.ts");
   const snippets = extractCodeParts(html).filter((part) => "snippet" in part);
   assert.deepEqual(snippets, [
     {

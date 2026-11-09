@@ -3,7 +3,10 @@ import assert from "node:assert/strict";
 import { Window as HappyWindow } from "happy-dom";
 import { initCodeBlocks } from "../src/code/client.ts";
 
-function fixture(blocked = false) {
+function fixture(
+  blocked = false,
+  copyOverride?: (value: string) => Promise<void>,
+) {
   const window = new HappyWindow({ url: "https://example.test" });
   const document = window.document as unknown as Document;
   const group = (kind: string, langs: string[], fallback = "") =>
@@ -24,9 +27,10 @@ function fixture(blocked = false) {
   initCodeBlocks(
     document as unknown as Document,
     window as unknown as Window & typeof globalThis,
-    async (value) => {
-      copied = value;
-    },
+    copyOverride ??
+      (async (value) => {
+        copied = value;
+      }),
   );
   assert.ok(
     document.querySelector("[role=tab]") === originalTab,
@@ -109,4 +113,86 @@ test("reload applies saved aliases without replacing unavailable preference, cop
   ).click();
   await new Promise((resolve) => setTimeout(resolve, 0));
   assert.match(groups[0].textContent ?? "", /Copy failed/);
+});
+
+test("page disposal restores readable fallback, removes listeners, and allows reinitialization", async () => {
+  const runtime = await import("../src/code/client.ts");
+  assert.equal(typeof runtime.disposeCodeBlocks, "function");
+  const { document, window } = fixture(true);
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>("[role=tab]")];
+  tabs[1].click();
+  runtime.disposeCodeBlocks(document);
+  runtime.disposeCodeBlocks(document);
+  assert.equal(
+    document.querySelectorAll("[data-code-block][hidden]").length,
+    0,
+  );
+  assert.ok(
+    [...document.querySelectorAll<HTMLElement>("[role=tablist]")].every(
+      (list) => list.hidden,
+    ),
+  );
+  tabs[0].click(); // Disposed controls cannot change the in-memory preference.
+  runtime.initCodeBlocks(
+    document,
+    window as unknown as Window & typeof globalThis,
+  );
+  assert.equal(tabs[1].getAttribute("aria-selected"), "true");
+  assert.equal(tabs[3].getAttribute("aria-selected"), "true");
+});
+
+test("detached groups unsubscribe and can be reinserted without duplicate listeners", () => {
+  const { document, window } = fixture();
+  const detached = document.querySelector<HTMLElement>("[data-code-group]")!;
+  const tab = detached.querySelectorAll<HTMLButtonElement>("[role=tab]")[1];
+  detached.remove();
+  initCodeBlocks(document, window as unknown as Window & typeof globalThis);
+  tab.click();
+  assert.equal(window.localStorage.getItem("blog-code-language"), null);
+  document.querySelectorAll<HTMLButtonElement>("[role=tab]")[1].click();
+  assert.equal(tab.getAttribute("aria-selected"), "false");
+  document.body.prepend(detached);
+  initCodeBlocks(document, window as unknown as Window & typeof globalThis);
+  initCodeBlocks(document, window as unknown as Window & typeof globalThis);
+  assert.equal(tab.getAttribute("aria-selected"), "true");
+  assert.equal(detached.querySelectorAll("[role=tab]").length, 2);
+  const storage = window.localStorage;
+  let writes = 0;
+  Object.defineProperty(window, "localStorage", {
+    value: {
+      getItem: (key: string) => storage.getItem(key),
+      setItem: (key: string, value: string) => {
+        writes++;
+        storage.setItem(key, value);
+      },
+    },
+  });
+  tab.click();
+  assert.equal(
+    writes,
+    1,
+    "one click must produce one preference update after repeated initialization",
+  );
+});
+
+test("a pending copy cannot update a disposed component", async () => {
+  const runtime = await import("../src/code/client.ts");
+  assert.equal(typeof runtime.disposeCodeBlocks, "function");
+  let finish!: () => void;
+  const { document } = fixture(
+    false,
+    () =>
+      new Promise<void>((resolve) => {
+        finish = resolve;
+      }),
+  );
+  const button = document.querySelector<HTMLButtonElement>("[data-code-copy]")!;
+  const status = document.querySelector<HTMLElement>("[data-copy-status]")!;
+  button.click();
+  runtime.disposeCodeBlocks(document);
+  finish();
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  assert.equal(button.textContent, "Copy");
+  assert.equal(status.textContent, "");
+  assert.equal(button.hidden, true);
 });

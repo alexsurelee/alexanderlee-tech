@@ -1,11 +1,8 @@
 import { fromHtml } from "hast-util-from-html";
 import type { Root, RootContent } from "hast";
+import type { Root as MarkdownRoot, Code } from "mdast";
+import type { Snippet } from "./snippets.server.ts";
 
-export interface Snippet {
-  source: string;
-  language?: string;
-  meta?: string;
-}
 export type CodePart = { html: string } | { snippet: Snippet };
 
 /** Read only fence placeholders. Preserve all other HTML byte-for-byte. */
@@ -53,4 +50,41 @@ export function getGroupSnippets(html: string): Snippet[] {
       throw Error("Code tab groups accept only code fences and whitespace");
     return [];
   });
+}
+
+/** Carry ordinary fences into the Astro rendering boundary as source data. */
+export default function remarkCode() {
+  return (tree: MarkdownRoot) => {
+    function walk(node: { type: string; children?: unknown[] }) {
+      if (node.type === "code") {
+        const code = node as Code;
+        const snippet: Snippet = {
+          source: code.value,
+          language: code.lang ?? "text",
+          meta: code.meta ?? "",
+        };
+        Object.assign(node, {
+          type: "paragraph",
+          children: [],
+          data: {
+            hName: "pre",
+            hProperties: {
+              "data-code-snippet": encodeURIComponent(JSON.stringify(snippet)),
+            },
+            hChildren: [
+              {
+                type: "element",
+                tagName: "code",
+                properties: {},
+                children: [{ type: "text", value: code.value }],
+              },
+            ],
+          },
+        });
+      }
+      for (const child of node.children ?? [])
+        walk(child as Parameters<typeof walk>[0]);
+    }
+    walk(tree);
+  };
 }

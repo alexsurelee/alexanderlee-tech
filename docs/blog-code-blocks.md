@@ -78,9 +78,12 @@ and an unsupported language containing literal HTML.
 
 `CodeBlock.astro`, `CodeLine.astro`, `CopyButton.astro`, and `CodeTabs.astro` own
 the HTML. File and language wrappers share `CodeTabs`, with distinct preference
-semantics. Native controllers enhance the rendered buttons without constructing UI.
+semantics. A `CodeTabsController` owns each group’s selection, event listeners, and cleanup;
+file and language groups use composition rather than subclasses. Copy behavior stays
+a small function beside page initialization.
 
-`highlight.ts` produces token and annotation data at build time. The remark adapter
+`snippets.server.ts` groups source preparation, highlighting, and snippet types.
+`markdown.server.ts` owns the fence transform and placeholder extraction. The adapter
 carries fences as source-data placeholders; `CodeContent.astro` replaces standalone
 placeholders with `CodeBlock` components. It preserves surrounding HTML exactly.
 The blog layout includes this boundary automatically. Other layouts rendering
@@ -91,3 +94,11 @@ Tab wrappers consume their fence placeholders before highlighting. For direct
 Astro usage, they also accept a `snippets` array of `{ source, language, meta }`
 objects; ordinary MDX fence authoring is unchanged. Without scripting, the tab
 buttons stay hidden and every snippet remains visible.
+
+The five TypeScript modules in `src/code` follow a functional core with browser
+controllers: `language.ts`, `snippets.server.ts`, `markdown.server.ts`, `tabs.ts`,
+and `client.ts`. The shared language-preference object uses subscriptions and stays
+browser-safe; neither browser entrypoint imports the highlighter or HTML parser.
+Before an Astro page swap, controllers release listeners and subscriptions, copy
+timers are cleared, and pending clipboard completions are ignored. Reinitialization
+retains the in-memory language preference when local storage is unavailable.

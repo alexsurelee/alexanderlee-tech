@@ -1,6 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { extractCodeParts, getGroupSnippets } from "../src/code/snippets.ts";
+import {
+  extractCodeParts,
+  getGroupSnippets,
+} from "../src/code/markdown.server.ts";
 const snippet = {
   source: "<script>literal</script>\n  x",
   language: "ts",

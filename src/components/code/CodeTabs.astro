@@ -1,7 +1,7 @@
 ---
 import { randomUUID } from 'node:crypto';
-import type { Snippet } from '../../code/snippets';
-import { highlightSnippet } from '../../code/highlight';
+import type { Snippet } from '../../code/snippets.server';
+import { highlightSnippet } from '../../code/snippets.server';
 import CodeBlock from './CodeBlock.astro';
 
 interface Props {

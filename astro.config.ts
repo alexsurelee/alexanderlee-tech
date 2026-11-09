@@ -2,7 +2,7 @@ import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
-import remarkCode from "./src/code/remark-code.ts";
+import remarkCode from "./src/code/markdown.server.ts";
 
 // https://astro.build/config
 export default defineConfig({
