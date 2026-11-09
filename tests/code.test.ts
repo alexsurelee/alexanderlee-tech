@@ -30,23 +30,27 @@ test("language aliases and fallback never replace the preferred language", () =>
   assert.equal(selectLanguage(["json", "py"], "rust"), 0);
 });
 
-import { renderSnippet } from "../src/code/render.ts";
-test("build-time renderer emits dual-theme tokens, decorations and safe plain text", () => {
-  const block = renderSnippet(
-    'const value = "<safe>";\n-old();\n+new();',
-    "ts",
-    'diff highlight="1" title="handler.ts"',
+import { highlightSnippet } from "../src/code/highlight.ts";
+test("highlighting returns presentation data without owning component markup", () => {
+  const snippet = highlightSnippet({
+    source: 'const value = "<safe>";\n-old();\n+new();',
+    language: "ts",
+    meta: 'diff highlight="1" title="handler.ts"',
+  });
+  assert.equal(snippet.language, "typescript");
+  assert.equal(snippet.title, "handler.ts");
+  assert.equal(snippet.copy, 'const value = "<safe>";\nnew();');
+  assert.deepEqual(
+    snippet.lines.map((line) => line.kind),
+    ["context", "removed", "added"],
   );
-  const json = JSON.stringify(block);
-  assert.match(json, /--hls-dark/);
-  assert.match(json, /code-line","added/);
-  assert.match(json, /code-line","removed/);
-  assert.match(json, /highlighted/);
-  assert.equal(block.properties["data-language"], "typescript");
-  const plain = JSON.stringify(
-    renderSnippet("<script>literal</script>", "unknown-language", ""),
-  );
-  assert.match(plain, /"type":"text","value":"<script>literal<\/script>"/);
+  assert.equal(snippet.lines[0].highlighted, true);
+  assert.match(JSON.stringify(snippet.lines[0].tokens), /--hls-dark/);
+  const plain = highlightSnippet({
+    source: "<script>literal</script>",
+    language: "unknown",
+  });
+  assert.equal(plain.lines[0].tokens[0].content, "<script>literal</script>");
 });
 
 import { unified } from "unified";
@@ -65,8 +69,17 @@ test("ordinary Markdown fences use the shared renderer through the actual transf
     .use(remarkCode)
     .use(remarkRehype);
   const html = toHtml(await processor.run(processor.parse(source)));
-  assert.match(html, /data-code-block/);
-  assert.match(html, /--hls-dark/);
-  assert.match(html, /data-code-source="const%20markdown%20%3D%20true%3B"/);
+  const { extractCodeParts } = await import("../src/code/snippets.ts");
+  const snippets = extractCodeParts(html).filter((part) => "snippet" in part);
+  assert.deepEqual(snippets, [
+    {
+      snippet: {
+        source: "const markdown = true;",
+        language: "ts",
+        meta: 'highlight="1"',
+      },
+    },
+  ]);
+  assert.match(html, /<pre data-code-snippet=/);
   assert.doesNotMatch(html, /astro-code|shiki|<pre><section/);
 });

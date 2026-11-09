@@ -1,5 +1,17 @@
 ---
-interface Props { label?: string; }
-const { label = 'Example files' } = Astro.props;
+import type { Snippet } from '../../code/snippets';
+import { getGroupSnippets } from '../../code/snippets';
+import CodeTabs from './CodeTabs.astro';
+
+interface Props {
+ label?: string;
+ snippets?: Snippet[];
+}
+
+const {
+ label = 'Example files',
+ snippets = getGroupSnippets(await Astro.slots.render('default')),
+} = Astro.props;
 ---
-<div class="code-group" data-code-group="file" data-label={label}><slot /></div>
+
+<CodeTabs kind="file" label={label} snippets={snippets} />

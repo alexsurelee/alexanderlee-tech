@@ -1,5 +1,19 @@
 ---
-interface Props { label?: string; default?: string }
-const { label = 'Code language', default: defaultLanguage } = Astro.props;
+import type { Snippet } from '../../code/snippets';
+import { getGroupSnippets } from '../../code/snippets';
+import CodeTabs from './CodeTabs.astro';
+
+interface Props {
+ label?: string;
+ default?: string;
+ snippets?: Snippet[];
+}
+
+const {
+ label = 'Code language',
+ default: defaultLanguage,
+ snippets = getGroupSnippets(await Astro.slots.render('default')),
+} = Astro.props;
 ---
-<div class="code-group" data-code-group="language" data-default={defaultLanguage} data-label={label}><slot /></div>
+
+<CodeTabs kind="language" label={label} default={defaultLanguage} snippets={snippets} />

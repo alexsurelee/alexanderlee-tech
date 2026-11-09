@@ -1,0 +1,31 @@
+---
+import type { HighlightedSnippet } from '../../code/highlight';
+import CodeLine from './CodeLine.astro';
+import CopyButton from './CopyButton.astro';
+
+interface Props {
+ snippet: HighlightedSnippet;
+ id?: string;
+ labelledBy?: string;
+}
+
+const { snippet, id, labelledBy } = Astro.props;
+---
+
+<section
+ class="code-block"
+ data-code-block
+ data-language={snippet.language}
+ data-title={snippet.title}
+ data-code-source={encodeURIComponent(snippet.copy)}
+ id={id}
+ aria-labelledby={labelledBy}
+>
+ <div class="code-toolbar">
+  <span class="code-title">{snippet.title}</span>
+  <CopyButton />
+ </div>
+ <pre><code>{snippet.lines.map((line, index) => (
+  <CodeLine line={line} newline={index < snippet.lines.length - 1} />
+ ))}</code></pre>
+</section>

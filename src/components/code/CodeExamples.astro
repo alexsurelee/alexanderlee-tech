@@ -7,18 +7,18 @@ import '../../styles/code.css';
 ---
 <div style="max-width: 720px; margin: auto;">
  <CodeSnippet source={'const message = "Hello";\nconsole.log(message);'} language="ts" meta='highlight="2"' />
- <LanguageTabs>
-  <CodeSnippet source="console.log('Hello');" language="ts" meta='title="TypeScript"' />
-  <CodeSnippet source="print('Hello')" language="py" meta='title="Python"' />
- </LanguageTabs>
- <LanguageTabs>
-  <CodeSnippet source="console.log('Synchronized');" language="typescript" />
-  <CodeSnippet source="print('Synchronized')" language="python" />
- </LanguageTabs>
- <FileTabs>
-  <CodeSnippet source={" const greeting = 'Hello';\n-console.log('Old');\n+console.log(greeting);"} language="ts" meta='title="handler-with-a-very-long-filename.ts" diff highlight="3"' />
-  <CodeSnippet source={'{"enabled": true}'} language="json" meta='title="config.json"' />
- </FileTabs>
+ <LanguageTabs snippets={[
+  {source: "console.log('Hello');", language:'ts', meta:'title="TypeScript"'},
+  {source: "print('Hello')", language:'py', meta:'title="Python"'},
+ ]} />
+ <LanguageTabs snippets={[
+  {source: "console.log('Synchronized');", language:'typescript'},
+  {source: "print('Synchronized')", language:'python'},
+ ]} />
+ <FileTabs snippets={[
+  {source: " const greeting = 'Hello';\n-console.log('Old');\n+console.log(greeting);", language:'ts', meta:'title="handler-with-a-very-long-filename.ts" diff highlight="3"'},
+  {source:'{"enabled": true}', language:'json', meta:'title="config.json"'},
+ ]} />
  <CodeSnippet source={'    const url = "https://example.com/' + 'a'.repeat(200) + '";'} language="ts" />
  <CodeSnippet source="<script>This stays literal.</script>" language="unsupported" />
 </div>

@@ -73,3 +73,21 @@ selection, arrow/Home/End navigation, clipboard feedback, 375px wrapping, both
 system themes, and readability with scripting disabled. The fixtures include a
 missing preferred-language fallback, a long filename, a long unbroken token, diffs,
 and an unsupported language containing literal HTML.
+
+## Component structure
+
+`CodeBlock.astro`, `CodeLine.astro`, `CopyButton.astro`, and `CodeTabs.astro` own
+the HTML. File and language wrappers share `CodeTabs`, with distinct preference
+semantics. Native controllers enhance the rendered buttons without constructing UI.
+
+`highlight.ts` produces token and annotation data at build time. The remark adapter
+carries fences as source-data placeholders; `CodeContent.astro` replaces standalone
+placeholders with `CodeBlock` components. It preserves surrounding HTML exactly.
+The blog layout includes this boundary automatically. Other layouts rendering
+ordinary fences should wrap their content with `CodeContent` and include
+`CodeBehavior` plus `code.css`.
+
+Tab wrappers consume their fence placeholders before highlighting. For direct
+Astro usage, they also accept a `snippets` array of `{ source, language, meta }`
+objects; ordinary MDX fence authoring is unchanged. Without scripting, the tab
+buttons stay hidden and every snippet remains visible.

@@ -1,24 +1,33 @@
 import type { Root, Code } from "mdast";
-import { renderSnippet } from "./render.ts";
+import type { Snippet } from "./snippets.ts";
 
-/** Preserve fences as structured HAST, including in MDX component children. */
+/** Carry ordinary fences into the Astro rendering boundary as source data. */
 export default function remarkCode() {
   return (tree: Root) => {
     function walk(node: { type: string; children?: unknown[] }) {
       if (node.type === "code") {
         const code = node as Code;
-        const rendered = renderSnippet(
-          code.value,
-          code.lang ?? "text",
-          code.meta ?? "",
-        );
+        const snippet: Snippet = {
+          source: code.value,
+          language: code.lang ?? "text",
+          meta: code.meta ?? "",
+        };
         Object.assign(node, {
           type: "paragraph",
           children: [],
           data: {
-            hName: rendered.tagName,
-            hProperties: rendered.properties,
-            hChildren: rendered.children,
+            hName: "pre",
+            hProperties: {
+              "data-code-snippet": encodeURIComponent(JSON.stringify(snippet)),
+            },
+            hChildren: [
+              {
+                type: "element",
+                tagName: "code",
+                properties: {},
+                children: [{ type: "text", value: code.value }],
+              },
+            ],
           },
         });
       }

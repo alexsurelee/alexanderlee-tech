@@ -1,7 +1,7 @@
 ---
-import { toHtml } from 'hast-util-to-html';
-import { renderSnippet } from '../../code/render';
-interface Props { source: string; language?: string; meta?: string }
-const { source, language, meta } = Astro.props;
+import type { Snippet } from '../../code/snippets';
+import { highlightSnippet } from '../../code/highlight';
+import CodeBlock from './CodeBlock.astro';
+interface Props extends Snippet {}
 ---
-<Fragment set:html={toHtml(renderSnippet(source, language, meta))} />
+<CodeBlock snippet={highlightSnippet(Astro.props)} />

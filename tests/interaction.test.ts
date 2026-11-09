@@ -7,7 +7,7 @@ function fixture(blocked = false) {
   const window = new HappyWindow({ url: "https://example.test" });
   const document = window.document as unknown as Document;
   const group = (kind: string, langs: string[], fallback = "") =>
-    `<div data-code-group="${kind}" data-default="${fallback}">${langs.map((lang) => `<section data-code-block data-language="${lang}" data-title="${lang}" data-code-source="${encodeURIComponent(`  ${lang}\n`)}"><div class="code-toolbar"><span class="code-title">${lang}</span><button data-code-copy hidden>Copy</button><span data-copy-status></span></div><pre><code>${lang}</code></pre><template data-code-source>  ${lang}\n</template></section>`).join("")}</div>`;
+    `<div data-code-group="${kind}" data-default="${fallback}"><div role="tablist" hidden>${langs.map((lang, index) => `<button role="tab" aria-controls="${kind}-${langs.join("-")}-${index}" id="tab-${kind}-${langs.join("-")}-${index}">${lang}</button>`).join("")}</div>${langs.map((lang, index) => `<section id="${kind}-${langs.join("-")}-${index}" aria-labelledby="tab-${kind}-${langs.join("-")}-${index}" data-code-block data-language="${lang}" data-title="${lang}" data-code-source="${encodeURIComponent(`  ${lang}\n`)}"><div class="code-toolbar"><span class="code-title">${lang}</span><button data-code-copy hidden>Copy</button><span data-copy-status></span></div><pre><code>${lang}</code></pre><template data-code-source>  ${lang}\n</template></section>`).join("")}</div>`;
   document.body.innerHTML =
     group("language", ["ts", "py"]) +
     group("language", ["typescript", "python"]) +
@@ -20,12 +20,17 @@ function fixture(blocked = false) {
       },
     });
   let copied = "";
+  const originalTab = document.querySelector("[role=tab]");
   initCodeBlocks(
     document as unknown as Document,
     window as unknown as Window & typeof globalThis,
     async (value) => {
       copied = value;
     },
+  );
+  assert.ok(
+    document.querySelector("[role=tab]") === originalTab,
+    "controller must reuse server-rendered tab buttons",
   );
   return { document, window, copied: () => copied };
 }
@@ -79,7 +84,7 @@ test("reload applies saved aliases without replacing unavailable preference, cop
   next.body.innerHTML = document.body.innerHTML
     .replaceAll('data-code-ready=""', "")
     .replaceAll('data-copy-ready=""', "");
-  next.querySelectorAll("[role=tablist]").forEach((list) => list.remove());
+
   initCodeBlocks(
     next,
     window as unknown as Window & typeof globalThis,

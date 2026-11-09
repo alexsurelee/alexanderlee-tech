@@ -1,0 +1,12 @@
+---
+import { extractCodeParts } from '../../code/snippets';
+import { highlightSnippet } from '../../code/highlight';
+import CodeBlock from './CodeBlock.astro';
+
+const parts = extractCodeParts(await Astro.slots.render('default'));
+---
+
+{parts.map(part => 'snippet' in part
+ ? <CodeBlock snippet={highlightSnippet(part.snippet)} />
+ : <Fragment set:html={part.html} />
+)}
