@@ -16,6 +16,15 @@ import HeaderLink from './HeaderLink.astro';
 	</nav>
 </header>
 <style>
+	/* Reuse the preloaded font without flashing a fallback in the site title. */
+	@font-face {
+		font-family: 'Charter Header';
+		src: url('/fonts/charter/charter_bold.woff2') format('woff2');
+		font-weight: 700;
+		font-style: normal;
+		font-display: block;
+	}
+
 	header {
 		width: min(var(--site-width), calc(100% - 3rem));
 		margin-inline: auto;
@@ -28,7 +37,7 @@ import HeaderLink from './HeaderLink.astro';
 		gap: 1rem;
 		padding-block: 1rem;
 	}
-	h2 { margin: 0; font-size: 1.25rem; letter-spacing: -0.02em; }
+	h2 { margin: 0; font-family: 'Charter Header', var(--font-body); font-size: 1.25rem; letter-spacing: -0.02em; }
 	h2 a { display: inline-flex; align-items: center; min-height: 44px; }
 	a { color: var(--ink); text-decoration: none; }
 	.internal-links { display: flex; gap: 0.25rem; }
