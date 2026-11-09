@@ -85,12 +85,6 @@ import HeaderLink from './HeaderLink.astro';
 
 <style is:global>
 	/* Move the background beneath a stationary snapshot of the tab labels. */
-	@media (prefers-reduced-motion: no-preference) {
-		@view-transition {
-			navigation: auto;
-		}
-	}
-
 	::view-transition-group(header-tab) {
 		z-index: 0;
 		animation-duration: 140ms;

@@ -94,15 +94,12 @@ html {
 	background: var(--paper);
 	scroll-padding-top: 2rem;
 }
-/* Native page crossfades keep navigation and script lifecycles browser-managed. */
+/* Keep the link cursor while the client router animates page snapshots. */
 :root:active-view-transition {
 	/* Hit testing targets the root while the browser swaps page snapshots. */
 	cursor: pointer;
 }
 @media (prefers-reduced-motion: no-preference) {
-	@view-transition {
-		navigation: auto;
-	}
 	::view-transition-old(root),
 	::view-transition-new(root) {
 		animation-duration: 300ms;
