@@ -5,12 +5,12 @@
   --hls-dark: var(--code-ink);
   --hls-dark-font-style: normal;
   --hls-dark-font-weight: 400;
-  --code-paper: #faf6ee;
-  --code-ink: #292820;
-  --code-rule: #c8bc9f;
+  --code-paper: var(--paper, #faf6ee);
+  --code-ink: var(--ink, #292820);
+  --code-rule: var(--rule, #c8bc9f);
   --code-add: #e2efdf;
   --code-remove: #f6e1dc;
-  --code-highlight: #f4e9c7;
+  --code-highlight: var(--highlight, #f4e9c7);
   color: var(--code-ink);
   background: var(--code-paper);
   border: 1px solid var(--code-rule);
@@ -144,12 +144,12 @@
 @media (prefers-color-scheme: dark) {
   .code-block,
   .code-group {
-    --code-paper: #191b1c;
-    --code-ink: #e8e2d7;
-    --code-rule: #5e594c;
+    --code-paper: var(--paper, #191b1c);
+    --code-ink: var(--ink, #e8e2d7);
+    --code-rule: var(--rule, #5e594c);
     --code-add: #233e2b;
     --code-remove: #4c2b2a;
-    --code-highlight: #403b28;
+    --code-highlight: var(--highlight, #403b28);
   }
   .code-line span[style] {
     color: var(--hls-dark) !important;

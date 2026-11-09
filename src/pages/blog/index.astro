@@ -17,95 +17,57 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
+			.page-intro { margin-bottom: 2.5rem; }
+			.page-intro p { color: var(--muted); }
+			ul { list-style: none; margin: 0; padding: 0; }
+			li { border-top: 1px solid var(--rule); }
+			li:last-child { border-bottom: 1px solid var(--rule); }
+			.post-link {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) auto;
+				gap: 1.5rem;
+				align-items: center;
+				padding-block: 1.75rem;
+				color: var(--ink);
 				text-decoration: none;
-				transition: 0.2s ease;
 			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
+			.post-link img { width: 112px; aspect-ratio: 1; object-fit: cover; }
+			.title { font-size: 1.6rem; font-weight: 400; margin-bottom: 0.5rem; }
+			.date { color: var(--muted); margin-bottom: 0.5rem; }
+			.description { margin: 0; color: var(--muted); font-size: 0.9em; }
+			@media (hover: hover) {
+				.post-link:hover .title { color: var(--accent); text-decoration: underline; text-underline-offset: 0.2em; }
 			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
+			@media (max-width: 600px) {
+				.post-link { gap: 1rem; }
+				.post-link img { width: 72px; }
+				.title { font-size: 1.35rem; }
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section>
-				<ul>
-					{posts.map((post) => (
-						<li>
-							<a href={`/blog/${post.id}/`}>
-								{post.data.heroImage && (
-									<Image width={720} height={360} src={post.data.heroImage} alt="" />
-								)}
-								<h4 class="title">{post.data.title}</h4>
-								<p class="date">
-									<FormattedDate date={post.data.pubDate} />
-								</p>
-							</a>
-						</li>
-					))}
-				</ul>
-			</section>
+			<div class="page-intro">
+				<h1>Blog</h1>
+				<p>Thoughts, notes, and things I’m learning along the way.</p>
+			</div>
+			<ul aria-label="Blog posts">
+				{posts.map((post) => (
+					<li>
+						<a class="post-link" href={`/blog/${post.id}/`}>
+							<div>
+								<p class="date"><FormattedDate date={post.data.pubDate} /></p>
+								<h2 class="title">{post.data.title}</h2>
+								<p class="description">{post.data.description}</p>
+							</div>
+							{post.data.heroImage && (
+								<Image width={224} height={224} src={post.data.heroImage} alt="" />
+							)}
+						</a>
+					</li>
+				))}
+			</ul>
 		</main>
 		<Footer />
 	</body>

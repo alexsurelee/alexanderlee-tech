@@ -4,7 +4,7 @@ import HeaderLink from './HeaderLink.astro';
 ---
 
 <header>
-	<nav>
+	<nav aria-label="Main navigation">
 		<h2>
 			<a href="/">{SITE_TITLE}</a>
 		</h2>
@@ -17,42 +17,38 @@ import HeaderLink from './HeaderLink.astro';
 </header>
 <style>
 	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+		width: min(var(--site-width), calc(100% - 3rem));
+		margin-inline: auto;
+		border-bottom: 1px solid var(--rule);
 	}
 	nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 1rem;
+		padding-block: 1rem;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
+	h2 { margin: 0; font-size: 1.25rem; letter-spacing: -0.02em; }
+	h2 a { display: inline-flex; align-items: center; min-height: 44px; }
+	a { color: var(--ink); text-decoration: none; }
+	.internal-links { display: flex; gap: 0.25rem; }
+	.internal-links :global(a) {
+		font: 0.75rem/1.5 var(--font-mono);
+		padding: 0.7rem 0.8rem;
+		min-height: 44px;
+		border-radius: 2px;
+		color: var(--muted);
 	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
+	.internal-links :global(a.active) {
+		color: var(--ink);
+		background: var(--highlight);
 	}
-	.social-links,
-	.social-links a {
-		display: flex;
+	@media (hover: hover) {
+		a:hover, .internal-links :global(a:hover) { color: var(--accent); }
 	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
+	@media (max-width: 600px) {
+		header { width: calc(100% - 2.5rem); }
+		nav { align-items: flex-start; flex-direction: column; gap: 0.25rem; }
+		.internal-links { margin-left: -0.8rem; }
 	}
 </style>
