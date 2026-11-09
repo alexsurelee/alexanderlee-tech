@@ -1,6 +1,9 @@
 # build output
 dist/
 storybook-static/
+
+# local implementation plans
+/docs/plans/
 # generated types
 .astro/
 
