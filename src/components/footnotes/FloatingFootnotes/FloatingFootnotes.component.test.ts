@@ -1,6 +1,6 @@
 import { expect, test, vi } from "vitest";
 import { mount, tick, unmount } from "svelte";
-import FloatingFootnotes from "../../src/components/footnotes/FloatingFootnotes.svelte";
+import FloatingFootnotes from "./FloatingFootnotes.svelte";
 test("waits for complete observation, retains the focused keyed note and disposes stale callbacks", async () => {
   document.body.innerHTML =
     '<article data-article-body><a id="r" href="#n" data-footnote-ref>1</a><a id="r2" href="#n2" data-footnote-ref>2</a><section data-footnotes><h2 id="h">Footnotes</h2><ol><li id="n"><a href="https://example.com">Source</a></li><li id="n2"><a href="https://example.org">Second</a></li></ol></section></article>';

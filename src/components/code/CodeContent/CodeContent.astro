@@ -1,8 +1,8 @@
 ---
-import { extractCodeParts } from '../../code/markdown.server';
-import { highlightSnippet } from '../../code/snippets.server';
+import { extractCodeParts } from '../../../code/markdown.server';
+import { highlightSnippet } from '../../../code/snippets.server';
 import { randomUUID } from 'node:crypto';
-import CodeExample from './CodeExample.svelte';
+import CodeExample from '../CodeExample/CodeExample.svelte';
 
 const parts = extractCodeParts(await Astro.slots.render('default'));
 ---

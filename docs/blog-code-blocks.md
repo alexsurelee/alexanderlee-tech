@@ -14,8 +14,8 @@ only runs the tab and copy controls; no highlighter or WebAssembly is shipped.
   diff prefixes. Highlight coordinates include removed lines.
 
 ````mdx
-import FileTabs from '../../components/code/FileTabs.astro';
-import LanguageTabs from '../../components/code/LanguageTabs.astro';
+import FileTabs from '../../components/code/FileTabs/FileTabs.astro';
+import LanguageTabs from '../../components/code/LanguageTabs/LanguageTabs.astro';
 
 <FileTabs label="Server example">
 
@@ -75,6 +75,11 @@ missing preferred-language fallback, a long filename, a long unbroken token, dif
 and an unsupported language containing literal HTML.
 
 ## Component structure
+
+Each component lives in its own directory under `src/components/code`, such as
+`CodeExample/CodeExample.svelte`. Component tests sit beside the implementation;
+`CodeExample/stories/` contains the Astro composition example and its story.
+Integration fixtures and server/policy tests remain under `tests/`.
 
 `CodeExample.svelte` owns a complete standalone snippet or group in one
 server-rendered `client:load` island. Its discriminated props distinguish standalone,

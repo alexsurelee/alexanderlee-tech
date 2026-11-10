@@ -1,7 +1,7 @@
 import { afterEach, expect, test, vi } from "vitest";
 import { mount, unmount, tick } from "svelte";
 import { fromStore, writable } from "svelte/store";
-import CodeExample from "../../src/components/code/CodeExample.svelte";
+import CodeExample from "./CodeExample.svelte";
 const components: ReturnType<typeof mount>[] = [];
 afterEach(async () => {
   for (const c of components.splice(0)) await unmount(c);

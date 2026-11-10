@@ -1,11 +1,11 @@
 ---
-import CodeContent from '../code/CodeContent.astro';
-import FloatingFootnotes from './FloatingFootnotes.svelte';
+import CodeContent from '../../../code/CodeContent/CodeContent.astro';
+import FloatingFootnotes from '../FloatingFootnotes.svelte';
 import { createMarkdownProcessor } from '@astrojs/markdown-remark';
-import remarkCode from '../../code/markdown.server';
-import '../../../src/styles/footnotes.css';
-import '../../../src/styles/code.css';
-import source from '../../../tests/fixtures/footnotes.md?raw';
+import remarkCode from '../../../../code/markdown.server';
+import '../../../../styles/footnotes.css';
+import '../../../../styles/code.css';
+import source from '../../../../../tests/fixtures/footnotes.md?raw';
 interface Props { long?: boolean; narrow?: boolean; dark?: boolean }
 const { long = false, narrow = false, dark = false } = Astro.props;
 const processor = await createMarkdownProcessor({ remarkPlugins: [remarkCode], syntaxHighlight: false });

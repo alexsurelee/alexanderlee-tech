@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import type { CodeExampleProps, HighlightedSnippet } from "../../code/types";
-  import { selectLanguage } from "../../code/language";
-  import { preferredLanguage } from "../../code/preference";
+  import type { CodeExampleProps, HighlightedSnippet } from "../../../code/types";
+  import { selectLanguage } from "../../../code/language";
+  import { preferredLanguage } from "../../../code/preference";
 
   let props: CodeExampleProps = $props();
   const blocks = $derived(

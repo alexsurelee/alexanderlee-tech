@@ -4,9 +4,9 @@
     copyFootnote,
     readArticleFootnotes,
     type ArticleFootnoteElements,
-  } from "../../footnotes/dom";
-  import { selectVisibleFootnotes, type Footnote } from "../../footnotes/model";
-  import { observeFootnotes } from "../../footnotes/observe";
+  } from "../../../footnotes/dom";
+  import { selectVisibleFootnotes, type Footnote } from "../../../footnotes/model";
+  import { observeFootnotes } from "../../../footnotes/observe";
 
   let { articleSelector = "[data-article-body]" }: { articleSelector?: string } =
     $props();

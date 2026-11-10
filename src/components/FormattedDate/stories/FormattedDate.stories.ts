@@ -1,4 +1,4 @@
-import FormattedDate from './FormattedDate.astro';
+import FormattedDate from '../FormattedDate.astro';
 
 const meta = {
 	title: 'Components/FormattedDate',

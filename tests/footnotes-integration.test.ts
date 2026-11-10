@@ -10,7 +10,7 @@ import {
   cp,
   realpath,
 } from "node:fs/promises";
-import { resolve, join, relative } from "node:path";
+import { resolve, join, relative, basename } from "node:path";
 import { promisify } from "node:util";
 import { execFile } from "node:child_process";
 import { Window } from "happy-dom";
@@ -30,11 +30,10 @@ test("Astro builds Markdown and MDX through BlogPost and CodeContent with native
     ])
       await cp(resolve("src", directory), join(root, "src", directory), {
         recursive: true,
+        filter: (source) =>
+          basename(source) !== "stories" &&
+          !source.endsWith(".component.test.ts"),
       });
-    await rm(join(root, "src/components/footnotes/FootnoteExamples.astro"));
-    await rm(
-      join(root, "src/components/footnotes/FootnoteExamples.stories.ts"),
-    );
     await cp(resolve("src/consts.ts"), join(root, "src/consts.ts"));
     await cp(resolve("public/fonts"), join(root, "public/fonts"), {
       recursive: true,
@@ -72,10 +71,10 @@ test("Astro builds Markdown and MDX through BlogPost and CodeContent with native
     await writeFile(
       join(root, "src/pages/code.astro"),
       `---
-import CodeContent from '../components/code/CodeContent.astro';
+import CodeContent from '../components/code/CodeContent/CodeContent.astro';
 import Fixture from '../../tests/fixtures/code-blocks.mdx';
 import Markdown from '../../tests/fixtures/code-blocks.md';
-import BaseHead from '../components/BaseHead.astro';
+import BaseHead from '../components/BaseHead/BaseHead.astro';
 import '../styles/code.css';
 ---
 <html lang="en"><head><BaseHead title="Code fixture" description="Test" /></head><body><CodeContent><Markdown /><Fixture /></CodeContent><a href="/markdown/">Footnotes</a></body></html>`,

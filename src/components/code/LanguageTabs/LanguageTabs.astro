@@ -1,9 +1,9 @@
 ---
-import type { Snippet } from '../../code/snippets.server';
-import { getGroupSnippets } from '../../code/markdown.server';
+import type { Snippet } from '../../../code/snippets.server';
+import { getGroupSnippets } from '../../../code/markdown.server';
 import { randomUUID } from 'node:crypto';
-import { highlightSnippet } from '../../code/snippets.server';
-import CodeExample from './CodeExample.svelte';
+import { highlightSnippet } from '../../../code/snippets.server';
+import CodeExample from '../CodeExample/CodeExample.svelte';
 
 interface Props {
  label?: string;

@@ -1,8 +1,8 @@
 ---
-import type { Snippet } from '../../code/snippets.server';
-import { highlightSnippet } from '../../code/snippets.server';
+import type { Snippet } from '../../../code/snippets.server';
+import { highlightSnippet } from '../../../code/snippets.server';
 import { randomUUID } from 'node:crypto';
-import CodeExample from './CodeExample.svelte';
+import CodeExample from '../CodeExample/CodeExample.svelte';
 interface Props extends Snippet {}
 ---
 <CodeExample client:load kind="standalone" id={`code-${randomUUID()}`} snippet={highlightSnippet(Astro.props)} />

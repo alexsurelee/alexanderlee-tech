@@ -1,4 +1,4 @@
-import Footer from './Footer.astro';
+import Footer from '../Footer.astro';
 
 const meta = {
 	title: 'Components/Footer',

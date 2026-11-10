@@ -32,6 +32,10 @@ permanent heading. A focused floating note is retained until focus leaves, even
 when scrolling would otherwise hide it. The region is nonmodal and does not
 announce automatic changes.
 
+The component, its colocated component test, and its `stories/` examples live in
+`src/components/footnotes/FloatingFootnotes/`. Shared DOM, policy, and geometry
+helpers remain under `src/footnotes/`.
+
 The parser owns canonical content. `FloatingFootnotes.svelte` is the only public
 UI entry point, mounted with `client:load` by the blog layout. Its optional
 `articleSelector` defaults to `[data-article-body]` and is resolved after mounting.

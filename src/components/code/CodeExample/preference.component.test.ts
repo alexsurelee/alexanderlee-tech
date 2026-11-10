@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { mount, unmount, tick } from "svelte";
-import CodeExample from "../../src/components/code/CodeExample.svelte";
+import CodeExample from "./CodeExample.svelte";
 test("denied storage synchronizes in memory across remounts and unavailable fallbacks preserve preference", async () => {
   Object.defineProperty(window, "localStorage", {
     configurable: true,
