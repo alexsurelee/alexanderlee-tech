@@ -2,22 +2,26 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE } from '../consts';
+import {SITE_TITLE} from '../consts';
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={`About | ${SITE_TITLE}`} description="About Alexander Lee’s personal website and blog at alexanderlee.tech." />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>About</h1>
-			<p>I’m Alexander Lee, and this is my personal website.</p>
-			<p>This site is primarily a blog: a place to share thoughts, keep notes, and write about what I’m learning.</p>
-			<p>You can <a href="/blog/">browse the blog</a> or <a href="/rss.xml">subscribe via RSS</a> to follow along.</p>
-		</main>
-		<Footer />
-	</body>
+<head>
+    <BaseHead title={`About | ${SITE_TITLE}`}
+              description="About Alexander Lee’s personal website and blog at alexanderlee.tech."/>
+</head>
+<body>
+<Header/>
+<main>
+    <h1>About</h1>
+    <p>My name is Alexander Lee. I'm a software technologist based in New Zealand.</p>
+    <p>Currently I work at Canva as a software engineer in the frontend sub-specialty. Previously I've worked at
+        Xero.</p>
+    <p>Some of my personal projects have included <a href="https://kiwisync.com">KiwiSync</a>, a bank sync service for
+        YNAB in New Zealand; a now defunct Discord bot called <a href="https://https://github.com/alexsurelee/VicBot">VicBot</a>,
+        which was developed over my undergraduate career to maintain an engineering-wide server; and a secret third thing that I'm working on in the background.</p>
+</main>
+<Footer/>
+</body>
 </html>
