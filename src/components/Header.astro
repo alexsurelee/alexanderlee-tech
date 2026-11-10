@@ -21,6 +21,10 @@ import HeaderLink from './HeaderLink.astro';
 				<span class="tab-highlight" aria-hidden="true"></span>
 				<span class="tab-label" style="view-transition-name: header-about">About</span>
 			</HeaderLink>
+			<HeaderLink href="/artefacts" data-astro-prefetch="hover">
+				<span class="tab-highlight" aria-hidden="true"></span>
+				<span class="tab-label" style="view-transition-name: header-artefacts">Artefacts</span>
+			</HeaderLink>
 		</div>
 	</nav>
 </header>
@@ -95,17 +99,20 @@ import HeaderLink from './HeaderLink.astro';
 
 	::view-transition-group(header-home),
 	::view-transition-group(header-blog),
+	::view-transition-group(header-artefacts),
 	::view-transition-group(header-about) {
 		z-index: 1;
 		animation: none;
 	}
 	::view-transition-old(header-home),
 	::view-transition-old(header-blog),
+	::view-transition-old(header-artefacts),
 	::view-transition-old(header-about) {
 		display: none;
 	}
 	::view-transition-new(header-home),
 	::view-transition-new(header-blog),
+	::view-transition-new(header-artefacts),
 	::view-transition-new(header-about) {
 		animation: none;
 		mix-blend-mode: normal;

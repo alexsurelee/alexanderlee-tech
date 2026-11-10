@@ -1,0 +1,52 @@
+---
+import { fileURLToPath } from 'node:url';
+import { getArtefacts } from '../../artefacts';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const artefacts = await getArtefacts(fileURLToPath(new URL('../../../public/artefacts/', import.meta.url)));
+const description = 'Reports, demos, and supporting material for open source contributions.';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Artefacts | ${SITE_TITLE}`} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-intro">
+				<h1>Artefacts</h1>
+				<p>{description}</p>
+			</div>
+			{artefacts.length > 0 ? (
+				<ul aria-label="Artefacts">
+					{artefacts.map((artefact) => (
+						<li><a href={artefact.href} data-astro-reload>{artefact.path}</a></li>
+					))}
+				</ul>
+			) : (
+				<p>No artefacts published yet.</p>
+			)}
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.page-intro { margin-bottom: 2.5rem; }
+	.page-intro p { color: var(--muted); }
+	ul { list-style: none; margin: 0; padding: 0; }
+	li { border-top: 1px solid var(--rule); }
+	li:last-child { border-bottom: 1px solid var(--rule); }
+	li a {
+		display: block;
+		padding-block: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		overflow-wrap: anywhere;
+	}
+</style>
