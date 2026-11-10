@@ -93,15 +93,16 @@
 html {
 	background: var(--paper);
 	scroll-padding-top: 2rem;
+	/* Keep the header's link boxes live during page transitions. */
+	view-transition-name: none;
 }
-/* Keep the link cursor while the client router animates page snapshots. */
-:root:active-view-transition {
-	/* Hit testing targets the root while the browser swaps page snapshots. */
-	cursor: pointer;
+/* Let new clicks reach live links so Astro can supersede an in-flight navigation. */
+::view-transition {
+	pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-	::view-transition-old(root),
-	::view-transition-new(root) {
+	::view-transition-old(page-content),
+	::view-transition-new(page-content) {
 		animation-duration: 300ms;
 		animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 	}
@@ -127,6 +128,7 @@ body {
 	overflow-wrap: break-word;
 }
 main {
+	view-transition-name: page-content;
 	width: min(var(--content-width), calc(100% - 3rem));
 	margin-inline: auto;
 	padding-block: clamp(3rem, 8vw, 6rem);

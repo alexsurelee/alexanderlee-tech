@@ -11,15 +11,15 @@ import HeaderLink from './HeaderLink.astro';
 		<div class="internal-links">
 			<HeaderLink href="/">
 				<span class="tab-highlight" aria-hidden="true"></span>
-				Home
+				<span class="tab-label" style="view-transition-name: header-home">Home</span>
 			</HeaderLink>
 			<HeaderLink href="/blog" data-astro-prefetch="hover">
 				<span class="tab-highlight" aria-hidden="true"></span>
-				Blog
+				<span class="tab-label" style="view-transition-name: header-blog">Blog</span>
 			</HeaderLink>
 			<HeaderLink href="/about" data-astro-prefetch="hover">
 				<span class="tab-highlight" aria-hidden="true"></span>
-				About
+				<span class="tab-label" style="view-transition-name: header-about">About</span>
 			</HeaderLink>
 		</div>
 	</nav>
@@ -49,7 +49,9 @@ import HeaderLink from './HeaderLink.astro';
 	h2 { margin: 0; font-family: 'Charter Header', var(--font-body); font-size: 1.25rem; letter-spacing: -0.02em; }
 	h2 a { display: inline-flex; align-items: center; min-height: 44px; }
 	a { color: var(--ink); text-decoration: none; }
-	.internal-links { display: flex; gap: 0.25rem; view-transition-name: header-labels; }
+	.internal-links { display: flex; gap: 0.25rem; }
+	/* Snapshot only the text, leaving each link box available for another click. */
+	.tab-label { display: inline-block; }
 	.internal-links :global(a) {
 		position: relative;
 		isolation: isolate;
@@ -91,14 +93,20 @@ import HeaderLink from './HeaderLink.astro';
 		animation-timing-function: ease-in-out;
 	}
 
-	::view-transition-group(header-labels) {
+	::view-transition-group(header-home),
+	::view-transition-group(header-blog),
+	::view-transition-group(header-about) {
 		z-index: 1;
 		animation: none;
 	}
-	::view-transition-old(header-labels) {
+	::view-transition-old(header-home),
+	::view-transition-old(header-blog),
+	::view-transition-old(header-about) {
 		display: none;
 	}
-	::view-transition-new(header-labels) {
+	::view-transition-new(header-home),
+	::view-transition-new(header-blog),
+	::view-transition-new(header-about) {
 		animation: none;
 		mix-blend-mode: normal;
 	}
