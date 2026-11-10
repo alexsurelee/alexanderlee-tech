@@ -41,6 +41,11 @@ issue is IDE-only. Use the JetBrains IDE tool's `get_file_problems` command with
 check; IDE diagnostics complement it. If IDE tools are unavailable, continue with
 the CLI check and state that IDE diagnostics could not be verified.
 
+After implementing and validating any fix or feature, explain its architecture
+to the user. Describe the components involved, how they interact, and the key
+design decisions, with detail proportional to the scope of the change. Include
+how the implementation was validated and any material limitations or tradeoffs.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
