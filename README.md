@@ -48,6 +48,10 @@ relative paths, including subdirectories. No manifest or frontmatter is needed.
 The catalogue updates on each site build; it shows an empty state until the first
 document is added. Search is not implemented yet.
 
+During development, adding, removing, or renaming an HTML artefact automatically
+restarts the dev server to refresh viewer routes. Bulk file changes are debounced.
+Editing an existing document uses the normal development reload.
+
 Each viewer page uses the site's header and footer with a wide, scrollable iframe
 and an “Open standalone” link. HTML documents are copied unchanged and loaded from
 their original `/artefacts/project-name/pr-123.html` URLs inside the iframe, so
