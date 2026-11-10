@@ -34,8 +34,11 @@ announce automatic changes.
 
 The parser owns canonical content. A TypeScript DOM adapter resolves its semantic
 attributes into an article-local model; a pure policy selects unique notes.
-The controller observes visibility and size, batches events, retains keyed nodes,
-and cleans up on Astro navigation. Floating content is a passive copy: controls,
+The Astro component owns the dock markup. The client entry point connects an
+observer module to the selection policy and a dock view. The observer module
+owns browser events and frame batching; visibility helpers handle geometry. The
+view renders the selected notes, retains keyed nodes and owns focus preservation.
+The client entry point cleans up both parts on Astro navigation. Floating content is a passive copy: controls,
 live regions and hydrated islands are omitted, code presentation is retained,
 and IDs and internal relationships are namespaced. Rich interactions remain in
 the permanent notes. No new dependencies or build transforms are required.
