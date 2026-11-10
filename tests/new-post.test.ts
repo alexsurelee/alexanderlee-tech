@@ -31,11 +31,12 @@ test('creates a blank post with safely quoted frontmatter and a title-derived fi
   assert.match(result.stdout, /src\/content\/blog\/my-first-post.md/);
 });
 
-test('creates an untitled post when no title is supplied', async (t) => {
+test('requires a title when no interactive terminal is available', async (t) => {
   const { directory, run } = await fixture(t);
   const result = run();
-  assert.equal(result.status, 0, result.stderr);
-  assert.match(await readFile(join(directory, 'untitled-post.md'), 'utf8'), /title: "Untitled post"/);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /title/i);
+  await assert.rejects(readdir(directory), { code: 'ENOENT' });
 });
 
 test('refuses to replace existing Markdown or MDX posts', async (t) => {

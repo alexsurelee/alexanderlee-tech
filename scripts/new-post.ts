@@ -1,11 +1,11 @@
 import { NodeRuntime, NodeServices } from '@effect/platform-node';
 import { Console, Effect, FileSystem } from 'effect';
-import { Argument, CliError, Command } from 'effect/cli';
+import { Argument, CliError, Command, Prompt } from 'effect/cli';
 import { join } from 'node:path';
 
 const titleArgument = Argument.String('title').pipe(
   Argument.withDescription('Post title, quoted when it contains spaces.'),
-  Argument.withDefault('Untitled post'),
+  Argument.withFallbackPrompt(Prompt.String({ message: 'Post title' })),
 );
 
 const command = Command.make('new:post', { title: titleArgument }, ({ title: input }) =>

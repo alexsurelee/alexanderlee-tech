@@ -49,8 +49,10 @@ them when needed and point `heroImage` to an existing image. Fill in the descrip
 and body before publishing. Posts are included in the next site build; there is no
 draft flag in the current schema.
 
-Omit the title to create `untitled-post.md` with the title “Untitled post”. The
-command refuses to overwrite an existing Markdown or MDX post with the same name.
+Run `pnpm new:post` without a title to enter it at the interactive “Post title”
+prompt. Press Ctrl+C to cancel. When running without an interactive terminal,
+supply the title as an argument. The command refuses to overwrite an existing
+Markdown or MDX post with the same name.
 The command uses Effect 4's `effect/cli` for argument parsing and help, with Node
 services supplied by `@effect/platform-node`. Run `pnpm new:post --help`
 for usage or `pnpm new:post --version` for the CLI version.
