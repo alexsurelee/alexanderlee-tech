@@ -39,8 +39,8 @@ files are not included in this repository. No font setup is needed to build the 
 ## Artefacts
 
 Add standalone `.html` documents to `public/artefacts/`. For example,
-`public/artefacts/project-name/pr-123.html` is published at
-`https://alexanderlee.tech/artefacts/project-name/pr-123.html` for linking from PRs.
+`public/artefacts/project-name/pr-123.html` gets a viewer page at
+`https://alexanderlee.tech/artefacts/view/project-name/pr-123/` for linking from PRs.
 Keep published paths stable so existing PR links continue to work.
 
 The `/artefacts/` page automatically lists HTML files alphabetically by their
@@ -48,12 +48,15 @@ relative paths, including subdirectories. No manifest or frontmatter is needed.
 The catalogue updates on each site build; it shows an empty state until the first
 document is added. Search is not implemented yet.
 
-HTML documents are copied unchanged and open with a full page load so their own
-styles and scripts work independently of the site's client router. Place any
+Each viewer page uses the site's header and footer with a wide, scrollable iframe
+and an “Open standalone” link. HTML documents are copied unchanged and loaded from
+their original `/artefacts/project-name/pr-123.html` URLs inside the iframe, so
+their styles and scripts work independently of the site's client router. Place any
 supporting assets alongside them and use relative URLs. Only HTML documents are
 listed. These are public, trusted documents running on the site's origin.
 `public/artefacts/index.html` is reserved for the generated catalogue; use a
 different filename or a subdirectory for an artefact named `index.html`.
+The `public/artefacts/view/` directory is also reserved for generated viewer pages.
 
 ## Storybook
 

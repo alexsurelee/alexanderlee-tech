@@ -1,0 +1,68 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getArtefacts } from '../../../artefacts';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import { SITE_TITLE } from '../../../consts';
+
+export const getStaticPaths = (async () => {
+	const artefacts = await getArtefacts();
+	return artefacts.map((artefact) => ({
+		params: { path: artefact.path.slice(0, -5).split('/').map(encodeURIComponent).join('/') },
+		props: { artefact },
+	}));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { artefact } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${artefact.path} | ${SITE_TITLE}`} description={`View ${artefact.path}, supporting material for an open source contribution.`} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="artefact-toolbar">
+				<a href="/artefacts/">← All artefacts</a>
+				<a href={artefact.sourceHref} data-astro-reload>Open standalone</a>
+			</div>
+			<h1>{artefact.path}</h1>
+			<iframe src={artefact.sourceHref} title={`Artefact: ${artefact.path}`} allowfullscreen></iframe>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main {
+		width: min(1320px, calc(100% - 3rem));
+		padding-block: 2rem;
+	}
+	.artefact-toolbar {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.5rem;
+		margin-bottom: 1rem;
+		font-size: 0.85em;
+	}
+	.artefact-toolbar a { display: inline-flex; align-items: center; min-height: 44px; }
+	h1 { font: 1.25rem/1.5 var(--font-mono); overflow-wrap: anywhere; }
+	iframe {
+		display: block;
+		width: 100%;
+		height: 80svh;
+		min-height: 36rem;
+		border: 1px solid var(--rule);
+		border-radius: 2px;
+		background: var(--paper);
+	}
+	@media (max-width: 600px) {
+		main { width: calc(100% - 2.5rem); }
+		h1 { font-size: 1rem; }
+	}
+</style>

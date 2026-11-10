@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-test("discovers HTML documents recursively with stable, encoded public links", async (t) => {
+test("discovers HTML documents with separate encoded viewer and source links", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "artefacts-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   await mkdir(join(root, "project"));
@@ -15,9 +15,26 @@ test("discovers HTML documents recursively with stable, encoded public links", a
 
   const { getArtefacts } = await import("../src/artefacts.ts");
   assert.deepEqual(await getArtefacts(root), [
-    { path: "project/a & b.html", href: "/artefacts/project/a%20%26%20b.html" },
-    { path: "z-report.html", href: "/artefacts/z-report.html" },
+    {
+      path: "project/a & b.html",
+      href: "/artefacts/view/project/a%20%26%20b/",
+      sourceHref: "/artefacts/project/a%20%26%20b.html",
+    },
+    {
+      path: "z-report.html",
+      href: "/artefacts/view/z-report/",
+      sourceHref: "/artefacts/z-report.html",
+    },
   ]);
+});
+
+test("reserves the view directory to prevent documents overwriting viewer routes", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "artefacts-"));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  await mkdir(join(root, "view"));
+  await writeFile(join(root, "view", "report.html"), "<h1>Collision</h1>");
+  const { getArtefacts } = await import("../src/artefacts.ts");
+  await assert.rejects(getArtefacts(root), /view.*reserved/);
 });
 
 test("an empty directory produces an empty catalogue", async (t) => {
