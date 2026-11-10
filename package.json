@@ -11,6 +11,7 @@
     "node": ">=22.23.4"
   },
   "scripts": {
+    "new:post": "node --import tsx scripts/new-post.ts",
     "dev": "astro dev",
     "typecheck": "astro check",
     "build": "astro build",
