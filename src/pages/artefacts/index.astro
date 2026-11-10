@@ -6,7 +6,8 @@ import Header from '../../components/Header.astro';
 import { SITE_TITLE } from '../../consts';
 
 const artefacts = await getArtefacts();
-const description = 'This is where I store my slop. ';
+const description = 'This is where I store my slop. Primarily supporting html artefacts for ' +
+	'open source PRs, which may either help the reader, or helped me as an author.';
 ---
 
 <!doctype html>
