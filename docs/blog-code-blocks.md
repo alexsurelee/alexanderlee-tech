@@ -81,8 +81,9 @@ server-rendered `client:load` island. Its discriminated props distinguish standa
 file, and language examples. It renders escaped tokens, selects panels, manages
 keyboard focus, retains the tallest visited height, and handles copy feedback.
 Controls remain hidden and every labeled panel remains readable until mounting.
-Copy attempts have per-panel sequence numbers so old completions cannot overwrite
-new feedback; teardown clears timers and ignores pending work.
+Each panel has one copy record: outcome, attempt number, and reset timer. Button
+labels and announcements derive from that outcome. Older completions cannot
+overwrite newer feedback; teardown clears timers and ignores pending work.
 
 `CodeContent.astro` reconstructs article HTML around ordinary fence placeholders.
 `CodeSnippet.astro`, `FileTabs.astro`, and `LanguageTabs.astro` prepare source and
@@ -92,10 +93,12 @@ renders one island, with no child islands or browser initialization API.
 `snippets.server.ts` performs highlighting and `markdown.server.ts` transforms and
 extracts fences. Serializable presentation contracts live in neutral `types.ts`.
 Browser code imports neither server module. `language.ts` provides pure aliases
-and fallback policy; private `preference.ts` lazily owns browser subscriptions and
-storage. Unavailable preferences never overwrite the saved value. The service
+and fallback policy; private `preference.ts` exposes a lazy browser-backed Svelte
+store. Each language group derives its selected index from the shared preference,
+current options, and default; file groups keep a local index. Reads begin after
+mounting, and unavailable preferences never overwrite the saved value. The store
 survives island remounts, including when storage is denied, without mutable SSR
-state. Svelte unsubscribes on teardown, including Astro router navigation.
+state. Svelte manages subscriptions and teardown, including Astro navigation.
 
 Other layouts should wrap ordinary fences in `CodeContent` and import `code.css`.
 Direct Astro adapters also accept source/snippet arrays; MDX authoring is unchanged.

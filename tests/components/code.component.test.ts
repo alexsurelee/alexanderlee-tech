@@ -1,5 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest";
 import { mount, unmount, tick } from "svelte";
+import { fromStore, writable } from "svelte/store";
 import CodeExample from "../../src/components/code/CodeExample.svelte";
 const components: ReturnType<typeof mount>[] = [];
 afterEach(async () => {
@@ -155,4 +156,49 @@ test("standalone examples escape token content and copy independently without ta
   expect(
     target.querySelector<HTMLButtonElement>("[data-code-copy]")?.hidden,
   ).toBe(false);
+});
+
+test("language selection is derived from the current options and default", async () => {
+  const options = writable([snippets[0], snippets[1]]);
+  const current = fromStore(options);
+  const fallback = writable("python");
+  const defaultLanguage = fromStore(fallback);
+  const target = document.createElement("div");
+  document.body.append(target);
+  components.push(
+    mount(CodeExample, {
+      target,
+      props: {
+        kind: "language",
+        id: "changing-options",
+        label: "Languages",
+        get defaultLanguage() {
+          return defaultLanguage.current;
+        },
+        get snippets() {
+          return current.current;
+        },
+      },
+    }),
+  );
+  await tick();
+  const selected = () =>
+    target.querySelector("[aria-selected=true]")?.textContent;
+  const language = selected();
+  options.set([snippets[1], snippets[0]]);
+  await tick();
+  expect(selected()).toBe(language);
+  // A now-unavailable preference falls back locally; changing options never saves it.
+  const saved = window.localStorage.getItem("blog-code-language");
+  options.set([{ ...snippets[0], language: "rust", title: "rust" }]);
+  await tick();
+  expect(selected()).toBe("rust");
+  options.set([
+    { ...snippets[0], language: "rust", title: "rust" },
+    { ...snippets[0], language: "json", title: "json" },
+  ]);
+  fallback.set("json");
+  await tick();
+  expect(selected()).toBe("json");
+  expect(window.localStorage.getItem("blog-code-language")).toBe(saved);
 });

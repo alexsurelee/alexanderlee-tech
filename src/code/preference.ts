@@ -1,38 +1,38 @@
+import { writable, type Subscriber, type Writable } from "svelte/store";
 import { normalizeLanguage } from "./language";
-const key = "blog-code-language";
-type StorageHost = {
-  readonly localStorage: Pick<Storage, "getItem" | "setItem">;
-};
 
-function createLanguagePreference(host: StorageHost) {
-  let value: string | undefined;
-  const listeners = new Set<(language: string) => void>();
-  try {
-    value = host.localStorage.getItem(key) ?? undefined;
-  } catch {
-    /* Use page memory when storage is blocked. */
+const key = "blog-code-language";
+let browserStore: Writable<string | undefined> | undefined;
+
+/** Created only in the browser; its value survives periods without subscribers. */
+function preference() {
+  if (!browserStore) {
+    let saved: string | undefined;
+    try {
+      saved = window.localStorage.getItem(key) ?? undefined;
+    } catch {
+      // Storage denial still allows document-local synchronization.
+    }
+    browserStore = writable(saved);
   }
-  return {
-    get: () => value,
-    set(language: string) {
-      value = normalizeLanguage(language);
-      try {
-        host.localStorage.setItem(key, value);
-      } catch {
-        /* Synchronization still works in memory. */
-      }
-      for (const listener of listeners) listener(value);
-    },
-    subscribe(listener: (language: string) => void) {
-      listeners.add(listener);
-      return () => {
-        listeners.delete(listener);
-      };
-    },
-  };
+  return browserStore;
 }
-let preference: ReturnType<typeof createLanguagePreference> | undefined;
-/** Lazy browser-only state survives island remounts, including denied storage. */
-export function languagePreference() {
-  return (preference ??= createLanguagePreference(window));
-}
+
+export const preferredLanguage = {
+  subscribe(run: Subscriber<string | undefined>, invalidate?: () => void) {
+    if (typeof window === "undefined") {
+      run(undefined);
+      return () => {};
+    }
+    return preference().subscribe(run, invalidate);
+  },
+  set(language: string) {
+    const value = normalizeLanguage(language);
+    preference().set(value);
+    try {
+      window.localStorage.setItem(key, value);
+    } catch {
+      // The store remains authoritative when storage is unavailable.
+    }
+  },
+};
