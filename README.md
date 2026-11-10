@@ -36,27 +36,6 @@ files are not included in this repository. No font setup is needed to build the 
 - Shared site title and description live in `src/consts.ts`.
 - The production URL is configured in `astro.config.ts` and used for canonical URLs, RSS, and the sitemap.
 
-Create a blank blog entry from the project root:
-
-```sh
-pnpm new:post "My new post"
-```
-
-This creates `src/content/blog/my-new-post.md` with the title, an empty
-`description`, and today's local date as `pubDate`. The body is blank. Optional
-`updatedDate` and `heroImage` fields are included as commented examples; uncomment
-them when needed and point `heroImage` to an existing image. Fill in the description
-and body before publishing. Posts are included in the next site build; there is no
-draft flag in the current schema.
-
-Run `pnpm new:post` without a title to enter it at the interactive “Post title”
-prompt. Press Ctrl+C to cancel. When running without an interactive terminal,
-supply the title as an argument. The command refuses to overwrite an existing
-Markdown or MDX post with the same name.
-The command uses Effect 4's `effect/cli` for argument parsing and help, with Node
-services supplied by `@effect/platform-node`. Run `pnpm new:post --help`
-for usage or `pnpm new:post --version` for the CLI version.
-
 ## Artefacts
 
 Add standalone `.html` documents to `public/artefacts/`. For example,
