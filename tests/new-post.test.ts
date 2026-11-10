@@ -62,3 +62,19 @@ test('rejects titles without letters or numbers without creating a file', async 
   }
   await assert.rejects(readdir(directory), { code: 'ENOENT' });
 });
+
+test('shows CLI help without creating a post', async (t) => {
+  const { directory, run } = await fixture(t);
+  const result = run('--help');
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Create a blank blog entry/);
+  assert.match(result.stdout, /title/);
+  await assert.rejects(readdir(directory), { code: 'ENOENT' });
+});
+
+test('rejects extra arguments without creating a post', async (t) => {
+  const { directory, run } = await fixture(t);
+  const result = run('My post', 'extra');
+  assert.equal(result.status, 1);
+  await assert.rejects(readdir(directory), { code: 'ENOENT' });
+});

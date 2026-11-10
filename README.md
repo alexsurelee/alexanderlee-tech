@@ -51,6 +51,9 @@ draft flag in the current schema.
 
 Omit the title to create `untitled-post.md` with the title “Untitled post”. The
 command refuses to overwrite an existing Markdown or MDX post with the same name.
+The command uses Effect 4's `effect/cli` for argument parsing and help, with Node
+services supplied by `@effect/platform-node`. Run `pnpm new:post --help`
+for usage or `pnpm new:post --version` for the CLI version.
 
 ## Artefacts
 
