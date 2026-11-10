@@ -36,6 +36,40 @@ files are not included in this repository. No font setup is needed to build the 
 - Shared site title and description live in `src/consts.ts`.
 - The production URL is configured in `astro.config.ts` and used for canonical URLs, RSS, and the sitemap.
 
+## Blog publication
+
+Create a post with `pnpm new:post "Post title"`. New Markdown files start as
+drafts; Markdown and MDX use the same publication model:
+
+```yaml
+---
+title: "Post title"
+description: ""
+status: draft
+createdDate: "2026-11-10"
+---
+```
+
+Drafts have no page, listing, RSS entry, or sitemap entry, including during local
+development. Their source remains in the repository; this does not hide it from
+anyone who can read the repository.
+
+To publish, change `status` to `published` and add
+`publishedDate: "2026-11-12"`. Keep `createdDate` unchanged. The next build creates
+the page and includes it in public indexes, ordered by publication date. To return
+a post to draft, change its status and remove `publishedDate`; the next build
+omits its page again. These states do not provide scheduled publication.
+
+Both states require `createdDate`; only published posts may have (and must have)
+`publishedDate`. An optional `updatedDate` records later edits. Dates are validated:
+publication cannot precede creation, and updates cannot precede creation or
+publication. Optional `heroImage` works in either state.
+
+The domain schema and state types live in `src/blog/post.ts`. The content collection
+adds Astro's image validation. Routes and RSS share `getPublishedPosts()` from
+`src/blog/posts.server.ts`, so public consumers receive only published posts.
+The post layout also requires the published state at the type level.
+
 ## Artefacts
 
 Add standalone `.html` documents to `public/artefacts/`. For example,

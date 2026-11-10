@@ -1,15 +1,13 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '../../blog/posts.server';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getPublishedPosts();
 ---
 
 <!doctype html>
@@ -66,7 +64,7 @@ const posts = (await getCollection('blog')).sort(
 						<li>
 							<a class="post-link" href={`/blog/${post.id}/`}>
 								<div>
-									<p class="date"><FormattedDate date={post.data.pubDate} /></p>
+									<p class="date"><FormattedDate date={post.data.publishedDate} /></p>
 									<h2 class="title">{post.data.title}</h2>
 									<p class="description">{post.data.description}</p>
 								</div>

@@ -24,7 +24,8 @@ test('creates a blank post with safely quoted frontmatter and a title-derived fi
   const result = run('My "first": post');
   assert.equal(result.status, 0, result.stderr);
   const content = await readFile(join(directory, 'my-first-post.md'), 'utf8');
-  assert.match(content, /^---\ntitle: "My \\"first\\": post"\ndescription: ""\npubDate: "\d{4}-\d{2}-\d{2}"\n/);
+  assert.match(content, /^---\ntitle: "My \\"first\\": post"\ndescription: ""\nstatus: draft\ncreatedDate: "\d{4}-\d{2}-\d{2}"\n/);
+  assert.doesNotMatch(content, /^publishedDate:|^pubDate:/m);
   assert.match(content, /# updatedDate:/);
   assert.match(content, /# heroImage:/);
   assert.match(content, /\n---\n\n$/);
