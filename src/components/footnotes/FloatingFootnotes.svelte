@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, tick } from "svelte";
+  import { onMount } from "svelte";
   import {
     copyFootnote,
     readArticleFootnotes,
@@ -7,90 +7,94 @@
   } from "../../footnotes/dom";
   import { selectVisibleFootnotes, type Footnote } from "../../footnotes/model";
   import { observeFootnotes } from "../../footnotes/observe";
+
   let { articleSelector = "[data-article-body]" }: { articleSelector?: string } =
     $props();
   let dock: HTMLElement;
-  let notes = $state<Footnote[]>([]);
-  let retained = $state(false);
-  let href = $state<string | undefined>();
-  let article: ArticleFootnoteElements;
-  let alive = false;
-  let refresh = () => {};
-  const containers = new Map<string, HTMLLIElement>();
+  let article = $state.raw<ArticleFootnoteElements>();
+  let selectedIds = $state<string[]>([]);
+  let focus = $state<{ noteId?: string }>();
+  const notes = $derived(
+    article?.model.notes.filter(
+      (note) => selectedIds.includes(note.id) || note.id === focus?.noteId,
+    ) ?? [],
+  );
+  const heading = $derived(article?.section.querySelector<HTMLElement>("h2"));
+
   function passive(node: HTMLLIElement, note: Footnote) {
     const clone = copyFootnote(
-      article.content.get(note.id)!,
+      article!.content.get(note.id)!,
       "floating-footnote-",
     );
     node.id = clone.id;
-    node.append(...clone.childNodes); // Svelte owns this keyed li; this action alone owns its passive children.
-    containers.set(note.id, node);
-    return {
-      destroy() {
-        containers.delete(note.id);
-      },
-    };
+    // Svelte owns the keyed container; this action alone owns its passive children.
+    node.append(...clone.childNodes);
   }
-  async function offset() {
-    await tick();
-    if (alive)
-      document.documentElement.style.setProperty(
-        "--footnote-offset",
-        `${dock.hidden ? 0 : dock.getBoundingClientRect().height}px`,
-      );
+  function trackFocus(event: FocusEvent) {
+    const target = event.type === "focusout" ? event.relatedTarget : event.target;
+    const inside = target instanceof Element && dock.contains(target);
+    focus = inside
+      ? { noteId: target.closest<HTMLElement>("[data-floating-note]")?.dataset.floatingNote }
+      : undefined;
   }
+  function updateOffset(visible: boolean) {
+    document.documentElement.style.setProperty(
+      "--footnote-offset",
+      `${visible ? dock.getBoundingClientRect().height : 0}px`,
+    );
+  }
+  $effect(() => {
+    // Effects run after the keyed notes and hidden attribute have been rendered.
+    if (article) updateOffset(notes.length > 0 || focus !== undefined);
+  });
   function navigate() {
-    const heading = article?.section.querySelector<HTMLElement>("h2");
     if (heading) {
       heading.tabIndex = -1;
       heading.focus({ preventScroll: true });
     }
-    refresh();
   }
   onMount(() => {
-    if (!window.IntersectionObserver || !window.ResizeObserver || !window.MutationObserver) return;
+    if (
+      !window.IntersectionObserver ||
+      !window.ResizeObserver ||
+      !window.MutationObserver
+    )
+      return;
     const body = document.querySelector<HTMLElement>(articleSelector);
     const found = body && readArticleFootnotes(body);
     if (!body || !found) return;
     article = found;
-    alive = true;
-    const heading = article.section.querySelector<HTMLElement>("h2");
-    if (heading?.id) href = `#${heading.id}`;
-    const observation = observeFootnotes(
+    const stopObserving = observeFootnotes(
       body,
-      article,
-      dock,
+      found,
       window,
       ({ references, permanentSection }) => {
-        const selected = selectVisibleFootnotes(
-          article.model,
+        selectedIds = selectVisibleFootnotes(
+          found.model,
           references,
           permanentSection,
-        );
-        const focused = notes.filter((note) =>
-          containers.get(note.id)?.contains(document.activeElement),
-        );
-        const ids = new Set([...selected, ...focused].map((note) => note.id));
-        notes = article.model.notes.filter((note) => ids.has(note.id));
-        retained = dock.contains(document.activeElement);
-        void offset();
+        ).map((note) => note.id);
       },
-      () => void offset(),
     );
-    refresh = observation.refresh;
+    let active = true;
+    const resize = new ResizeObserver(() => {
+      if (active) updateOffset(!dock.hidden);
+    });
+    resize.observe(dock);
     return () => {
-      alive = false;
-      observation.dispose();
+      active = false;
+      stopObserving();
+      resize.disconnect();
       document.documentElement.style.removeProperty("--footnote-offset");
     };
   });
 </script>
 
-<aside bind:this={dock} data-floating-footnotes hidden={!notes.length && !retained} aria-label="Footnotes on this screen">
+<aside bind:this={dock} data-floating-footnotes hidden={!notes.length && !focus} aria-label="Footnotes on this screen" onfocusin={trackFocus} onfocusout={trackFocus}>
  <div class="footnote-dock-inner">
-  <a data-all-footnotes {href} onclick={navigate}>All footnotes</a>
+  <a data-all-footnotes href={heading?.id ? `#${heading.id}` : undefined} onclick={navigate}>All footnotes</a>
   <ol data-floating-note-list>
-   {#each notes as note (note.id)}<li value={note.number} use:passive={note}></li>{/each}
+   {#each notes as note (note.id)}<li value={note.number} data-floating-note={note.id} use:passive={note}></li>{/each}
   </ol>
  </div>
 </aside>

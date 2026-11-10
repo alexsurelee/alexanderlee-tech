@@ -36,15 +36,18 @@ The parser owns canonical content. `FloatingFootnotes.svelte` is the only public
 UI entry point, mounted with `client:load` by the blog layout. Its optional
 `articleSelector` defaults to `[data-article-body]` and is resolved after mounting.
 The component discovers article-local notes through `dom.ts`, uses the pure
-selection policy in `model.ts`, and coordinates `observe.ts` and visibility helpers.
+selection policy in `model.ts`, and observes article visibility through `observe.ts`
+and geometry helpers. That observer knows nothing about dock sizing or focus and
+returns only a cleanup function.
 It waits for complete initial observations and batches geometry in animation frames.
 Missing content or observer APIs leave the dock hidden and native notes usable.
 
-Svelte owns the keyed note containers. The rendered set combines selected notes
-and notes containing focus, ordered by canonical number. A private action alone
-owns each container's passive children; selection changes preserve focused nodes.
-Focusout triggers reevaluation. After DOM updates the component measures the dock
-for the root scroll offset. Teardown disconnects observers, events and frames and
+Svelte owns the keyed note containers. Selected note IDs and dock focus are the
+independent inputs; the rendered notes derive from their union in canonical order.
+A private action alone owns each container's passive children; no DOM-node registry
+is required. Focus events update retention immediately without a geometry scan.
+The component measures the dock after DOM updates and owns its ResizeObserver
+for the root scroll offset. Dock resizing does not rescan article markers. Teardown disconnects observers, events and frames and
 removes that property; Astro navigation uses the normal island lifecycle.
 
 Passive copies unwrap only recognized code-example islands. They preserve every

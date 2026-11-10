@@ -6,14 +6,12 @@ interface FootnoteVisibility {
   permanentSection: boolean;
 }
 
-/** Observers and events share one frame; the first complete observation gates rendering. */
+/** Article visibility only: batch geometry and wait for complete initial observation. */
 export function observeFootnotes(
   body: HTMLElement,
   article: ArticleFootnoteElements,
-  dock: HTMLElement,
   win: Window & typeof globalThis,
   onVisibility: (visibility: FootnoteVisibility) => void,
-  onResize: () => void,
 ) {
   const document = body.ownerDocument;
   const observed = [...article.markers.values(), article.section];
@@ -46,15 +44,8 @@ export function observeFootnotes(
     refresh();
   }, { threshold: [0, 0.0001] });
 
-  const resize = new win.ResizeObserver(() => {
-    if (disposed) return;
-    onResize();
-    refresh();
-  });
-
   const mutations = new win.MutationObserver(refresh);
   observed.forEach(element => intersection.observe(element));
-  resize.observe(dock);
   mutations.observe(body, {
     subtree: true,
     attributes: true,
@@ -63,7 +54,6 @@ export function observeFootnotes(
 
   // Known-marker geometry is measured on demand, never by a polling loop.
   const events: readonly [EventTarget, string, boolean][] = [
-    [dock, 'focusout', false],
     [win, 'resize', false],
     [document, 'scroll', true],
     ...(win.visualViewport ? [
@@ -75,17 +65,13 @@ export function observeFootnotes(
     target.addEventListener(event, refresh, capture),
   );
 
-  return {
-    refresh,
-    dispose() {
-      disposed = true;
-      win.cancelAnimationFrame(frame);
-      intersection.disconnect();
-      resize.disconnect();
-      mutations.disconnect();
-      events.forEach(([target, event, capture]) =>
-        target.removeEventListener(event, refresh, capture),
-      );
-    },
+  return () => {
+    disposed = true;
+    win.cancelAnimationFrame(frame);
+    intersection.disconnect();
+    mutations.disconnect();
+    events.forEach(([target, event, capture]) =>
+      target.removeEventListener(event, refresh, capture),
+    );
   };
 }

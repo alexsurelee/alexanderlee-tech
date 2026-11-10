@@ -82,3 +82,21 @@ Mobile emulation does not replace testing a physical device. Storybook retains
 its large preview-chunk build warning.
 
 Nothing was deployed or pushed.
+
+## Follow-up simplification
+
+Language groups now derive selection from a private Svelte preference store and
+current options/defaults; Svelte owns subscription cleanup. Each code panel has
+one copy record whose outcome determines both the label and announcement.
+Floating notes derive from selected IDs and dock focus, with no DOM-node registry.
+The article observer returns only cleanup; focus events and dock resizing are
+owned by the component. Blur no longer waits for an article geometry frame, and
+dock resizing no longer rescans markers.
+
+All 41 tests, type checks, builds and changed-file WebStorm inspections pass.
+Browser regressions cover production hydration, reload persistence, exact diff
+copy, 375px retained panel height, built Storybook synchronization, passive code,
+keyed note focus retention and immediate blur dismissal with offset reset.
+The size table above describes the initial cutover, before this follow-up. The
+remaining manual-check limitations above still apply. No dependencies or files
+were added by this follow-up, and nothing was pushed or deployed.

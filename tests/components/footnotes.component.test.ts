@@ -3,9 +3,10 @@ import { mount, tick, unmount } from "svelte";
 import FloatingFootnotes from "../../src/components/footnotes/FloatingFootnotes.svelte";
 test("waits for complete observation, retains the focused keyed note and disposes stale callbacks", async () => {
   document.body.innerHTML =
-    '<article data-article-body><a id="r" href="#n" data-footnote-ref>1</a><section data-footnotes><h2 id="h">Footnotes</h2><ol><li id="n"><a href="https://example.com">Source</a></li></ol></section></article>';
+    '<article data-article-body><a id="r" href="#n" data-footnote-ref>1</a><a id="r2" href="#n2" data-footnote-ref>2</a><section data-footnotes><h2 id="h">Footnotes</h2><ol><li id="n"><a href="https://example.com">Source</a></li><li id="n2"><a href="https://example.org">Second</a></li></ol></section></article>';
   let callback!: IntersectionObserverCallback;
   const disconnect = vi.fn();
+  let resizeCallback!: ResizeObserverCallback;
   vi.stubGlobal(
     "IntersectionObserver",
     class {
@@ -19,11 +20,16 @@ test("waits for complete observation, retains the focused keyed note and dispose
   vi.stubGlobal(
     "ResizeObserver",
     class {
+      constructor(cb: ResizeObserverCallback) {
+        resizeCallback = cb;
+      }
       observe() {}
       disconnect = disconnect;
     },
   );
   const marker = document.querySelector("#r")!;
+  const marker2 = document.querySelector("#r2")!;
+  let marker2Visible = false;
   const section = document.querySelector("section")!;
   let markerVisible = true;
   let sectionVisible = false;
@@ -37,6 +43,7 @@ test("waits for complete observation, retains the focused keyed note and dispose
       height: 10,
     }) as DOMRect;
   marker.getBoundingClientRect = () => rect(markerVisible);
+  marker2.getBoundingClientRect = () => rect(marker2Visible);
   section.getBoundingClientRect = () => rect(sectionVisible);
   const target = document.createElement("div");
   document.body.append(target);
@@ -56,21 +63,46 @@ test("waits for complete observation, retains the focused keyed note and dispose
     await observe([marker]);
     expect(dock.hidden).toBe(true);
     await observe([section]);
+    expect(dock.hidden).toBe(true);
+    await observe([marker2]);
     expect(dock.hidden).toBe(false);
+    // Resizing the dock updates its offset without rescanning article markers.
+    const markerRect = vi.spyOn(marker, "getBoundingClientRect");
+    vi.spyOn(dock, "getBoundingClientRect").mockReturnValue({
+      ...rect(true),
+      height: 180,
+    });
+    resizeCallback([], {} as ResizeObserver);
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    await tick();
+    expect(
+      document.documentElement.style.getPropertyValue("--footnote-offset"),
+    ).toBe("180px");
+
+    expect(markerRect).not.toHaveBeenCalled();
     const link = dock.querySelector<HTMLAnchorElement>("li a")!;
     link.focus();
     markerVisible = false;
+    marker2Visible = true;
+    await observe([]);
+    expect(
+      [...dock.querySelectorAll<HTMLLIElement>("[data-floating-note]")].map(
+        (node) => node.value,
+      ),
+    ).toEqual([1, 2]);
+    expect(dock.querySelector("li a")).toBe(link);
     sectionVisible = true;
     await observe([]);
     expect(dock.querySelector("li a")).toBe(link);
     expect(dock.hidden).toBe(false);
     link.blur();
-    await observe([]);
+    await tick();
     expect(dock.hidden).toBe(true);
   } finally {
     await unmount(c);
   }
   await observe([]);
+  resizeCallback([], {} as ResizeObserver);
   expect(target.querySelector("aside")).toBe(null);
   expect(disconnect).toHaveBeenCalledTimes(2);
   expect(
