@@ -1,6 +1,0 @@
-<script>
- import { initFootnotes, disposeFootnotes } from '../../footnotes/client';
- initFootnotes(document, window);
- document.addEventListener('astro:before-swap', () => disposeFootnotes(document));
- document.addEventListener('astro:page-load', () => initFootnotes(document, window));
-</script>

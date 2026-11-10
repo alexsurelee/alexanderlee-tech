@@ -1,7 +1,6 @@
 ---
 import CodeContent from '../code/CodeContent.astro';
-import FloatingFootnotes from './FloatingFootnotes.astro';
-import FootnoteBehavior from './FootnoteBehavior.astro';
+import FloatingFootnotes from './FloatingFootnotes.svelte';
 import { createMarkdownProcessor } from '@astrojs/markdown-remark';
 import remarkCode from '../../code/markdown.server';
 import '../../../src/styles/footnotes.css';
@@ -15,5 +14,4 @@ const result = await processor.render(long ? source.replace('    Another paragra
 <div style={`max-width:${narrow ? 320 : 720}px;margin:2rem auto;${dark ? "--paper:#191b1c;--ink:#e8e2d7;background:var(--paper);color:var(--ink);padding:1rem" : ""}`} data-article-body>
  <CodeContent><Fragment set:html={result.code} /></CodeContent>
 </div>
-<FloatingFootnotes />
-<FootnoteBehavior />
+<FloatingFootnotes client:load />

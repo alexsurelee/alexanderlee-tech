@@ -2,7 +2,6 @@
 import CodeSnippet from './CodeSnippet.astro';
 import FileTabs from './FileTabs.astro';
 import LanguageTabs from './LanguageTabs.astro';
-import CodeBehavior from './CodeBehavior.astro';
 import '../../styles/code.css';
 ---
 <div style="max-width: 720px; margin: auto;">
@@ -22,4 +21,3 @@ import '../../styles/code.css';
  <CodeSnippet source={'    const url = "https://example.com/' + 'a'.repeat(200) + '";'} language="ts" />
  <CodeSnippet source="<script>This stays literal.</script>" language="unsupported" />
 </div>
-<CodeBehavior />

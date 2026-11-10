@@ -1,7 +1,0 @@
----
-import type { HighlightedLine } from '../../code/snippets.server';
-interface Props { line: HighlightedLine; newline: boolean }
-const { line, newline } = Astro.props;
-const marker = line.kind === 'added' ? '+' : line.kind === 'removed' ? '−' : ' ';
----
-<span class:list={['code-line', line.kind, {highlighted:line.highlighted}]} style={`--indent:${line.indent}ch`}><span class="code-marker" aria-hidden="true">{marker}</span>{line.kind !== 'context' && <span class="sr-only">{line.kind}: </span>}{line.tokens.map(token => <span style={token.style}>{token.content}</span>)}{newline ? '\n' : ''}</span>

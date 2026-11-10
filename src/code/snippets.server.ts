@@ -10,18 +10,15 @@ import {
 } from "@pierre/highlights/themes";
 import { normalizeLanguage } from "./language.ts";
 
-export interface Snippet {
-  source: string;
-  language?: string;
-  meta?: string;
-}
+import type { Snippet, HighlightedSnippet } from "./types";
+export type { Snippet, HighlightedSnippet, HighlightedLine } from "./types";
 
 /** Build-time presentation data; UI structure belongs to Astro components. */
 export function highlightSnippet({
   source,
   language = "text",
   meta = "",
-}: Snippet) {
+}: Snippet): HighlightedSnippet {
   const lang = normalizeLanguage(language);
   const { lines, copy } = prepareSnippet(source, meta);
   const tokens: ThemedToken[][] = isSupportedLanguage(lang)
@@ -52,9 +49,6 @@ export function highlightSnippet({
     })),
   };
 }
-export type HighlightedSnippet = ReturnType<typeof highlightSnippet>;
-export type HighlightedLine = HighlightedSnippet["lines"][number];
-
 export function prepareSnippet(source: string, meta: string) {
   const diff = /(?:^|\s)diff(?:\s|$)/.test(meta);
   const highlighted = new Set<number>();
@@ -66,12 +60,11 @@ export function prepareSnippet(source: string, meta: string) {
   }
   const lines = source.split("\n").map((text, index) => ({
     text: diff && /^[ +\-]/.test(text) ? text.slice(1) : text,
-    kind:
-      diff && text.startsWith("+")
-        ? "added"
-        : diff && text.startsWith("-")
-          ? "removed"
-          : "context",
+    kind: (diff && text.startsWith("+")
+      ? "added"
+      : diff && text.startsWith("-")
+        ? "removed"
+        : "context") as "added" | "removed" | "context",
     highlighted: highlighted.has(index + 1),
   }));
   return {

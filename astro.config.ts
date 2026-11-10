@@ -1,4 +1,5 @@
 import { unified } from "@astrojs/markdown-remark";
+import svelte from "@astrojs/svelte";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
@@ -11,6 +12,7 @@ export default defineConfig({
   prefetch: true,
   integrations: [
     mdx(),
+    svelte(),
     sitemap({
       filter: (page) => !/^\/artefacts(?:\/|$)/.test(new URL(page).pathname),
     }),

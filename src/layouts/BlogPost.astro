@@ -6,11 +6,9 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import CodeContent from '../components/code/CodeContent.astro';
-import CodeBehavior from '../components/code/CodeBehavior.astro';
 import '../styles/code.css';
 import '../styles/footnotes.css';
-import FloatingFootnotes from '../components/footnotes/FloatingFootnotes.astro';
-import FootnoteBehavior from '../components/footnotes/FootnoteBehavior.astro';
+import FloatingFootnotes from '../components/footnotes/FloatingFootnotes.svelte';
 import { SITE_TITLE } from '../consts';
 
 type Props = CollectionEntry<'blog'>['data'];
@@ -66,8 +64,8 @@ const { title, description, status, createdDate, publishedDate, updatedDate, her
 			</article>
 		</main>
 		<Footer />
-		<CodeBehavior />
-		<FloatingFootnotes />
-		<FootnoteBehavior />
+
+		<FloatingFootnotes client:load />
+
 	</body>
 </html>

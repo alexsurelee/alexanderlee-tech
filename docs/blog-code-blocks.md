@@ -76,29 +76,32 @@ and an unsupported language containing literal HTML.
 
 ## Component structure
 
-`CodeBlock.astro`, `CodeLine.astro`, `CopyButton.astro`, and `CodeTabs.astro` own
-the HTML. File and language wrappers share `CodeTabs`, with distinct preference
-semantics. A `CodeTabsController` owns each group’s selection, event listeners, and cleanup;
-file and language groups use composition rather than subclasses. Copy behavior stays
-a small function beside page initialization.
+`CodeExample.svelte` owns a complete standalone snippet or group in one
+server-rendered `client:load` island. Its discriminated props distinguish standalone,
+file, and language examples. It renders escaped tokens, selects panels, manages
+keyboard focus, retains the tallest visited height, and handles copy feedback.
+Controls remain hidden and every labeled panel remains readable until mounting.
+Copy attempts have per-panel sequence numbers so old completions cannot overwrite
+new feedback; teardown clears timers and ignores pending work.
 
-`snippets.server.ts` groups source preparation, highlighting, and snippet types.
-`markdown.server.ts` owns the fence transform and placeholder extraction. The adapter
-carries fences as source-data placeholders; `CodeContent.astro` replaces standalone
-placeholders with `CodeBlock` components. It preserves surrounding HTML exactly.
-The blog layout includes this boundary automatically. Other layouts rendering
-ordinary fences should wrap their content with `CodeContent` and include
-`CodeBehavior` plus `code.css`.
+`CodeContent.astro` reconstructs article HTML around ordinary fence placeholders.
+`CodeSnippet.astro`, `FileTabs.astro`, and `LanguageTabs.astro` prepare source and
+server-generated instance IDs. Empty groups throw at this boundary. Each adapter
+renders one island, with no child islands or browser initialization API.
 
-Tab wrappers consume their fence placeholders before highlighting. For direct
-Astro usage, they also accept a `snippets` array of `{ source, language, meta }`
-objects; ordinary MDX fence authoring is unchanged. Without scripting, the tab
-buttons stay hidden and every snippet remains visible.
+`snippets.server.ts` performs highlighting and `markdown.server.ts` transforms and
+extracts fences. Serializable presentation contracts live in neutral `types.ts`.
+Browser code imports neither server module. `language.ts` provides pure aliases
+and fallback policy; private `preference.ts` lazily owns browser subscriptions and
+storage. Unavailable preferences never overwrite the saved value. The service
+survives island remounts, including when storage is denied, without mutable SSR
+state. Svelte unsubscribes on teardown, including Astro router navigation.
 
-The five TypeScript modules in `src/code` follow a functional core with browser
-controllers: `language.ts`, `snippets.server.ts`, `markdown.server.ts`, `tabs.ts`,
-and `client.ts`. The shared language-preference object uses subscriptions and stays
-browser-safe; neither browser entrypoint imports the highlighter or HTML parser.
-Before an Astro page swap, controllers release listeners and subscriptions, copy
-timers are cleared, and pending clipboard completions are ignored. Reinitialization
-retains the in-memory language preference when local storage is unavailable.
+Other layouts should wrap ordinary fences in `CodeContent` and import `code.css`.
+Direct Astro adapters also accept source/snippet arrays; MDX authoring is unchanged.
+
+`pnpm test` runs Node policy/transform tests, isolated production Markdown/MDX
+builds, and real compiled Svelte component tests through Vitest. DOM tests check
+interaction and lifecycle, not layout. To retain the production fixtures for browser
+inspection, run `CUTOVER_FIXTURE_DIR=/tmp/svelte-cutover-fixture node --import tsx
+--test tests/footnotes-integration.test.ts` (on one line), then serve that directory.

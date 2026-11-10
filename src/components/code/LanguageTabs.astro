@@ -1,7 +1,9 @@
 ---
 import type { Snippet } from '../../code/snippets.server';
 import { getGroupSnippets } from '../../code/markdown.server';
-import CodeTabs from './CodeTabs.astro';
+import { randomUUID } from 'node:crypto';
+import { highlightSnippet } from '../../code/snippets.server';
+import CodeExample from './CodeExample.svelte';
 
 interface Props {
  label?: string;
@@ -14,6 +16,7 @@ const {
  default: defaultLanguage,
  snippets = getGroupSnippets(await Astro.slots.render('default')),
 } = Astro.props;
+if (!snippets.length) throw new Error("Code tab groups require at least one snippet");
 ---
 
-<CodeTabs kind="language" label={label} default={defaultLanguage} snippets={snippets} />
+<CodeExample client:load id={`code-${randomUUID()}`} kind="language" label={label} defaultLanguage={defaultLanguage} snippets={snippets.map(highlightSnippet)} />

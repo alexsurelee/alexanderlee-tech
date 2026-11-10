@@ -1,6 +1,0 @@
-<script>
- import { initCodeBlocks, disposeCodeBlocks } from '../../code/client';
- initCodeBlocks(document, window);
- document.addEventListener('astro:before-swap', () => disposeCodeBlocks(document));
- document.addEventListener('astro:page-load', () => initCodeBlocks(document, window));
-</script>

@@ -1,3 +1,5 @@
+import LanguageTabs from '../../src/components/code/LanguageTabs.astro';
+
 First reference.[^later] Repeated.[^later] Second.[^early] Missing.[^missing]
 
 [^early]: A second note.
@@ -10,6 +12,18 @@ First reference.[^later] Repeated.[^later] Second.[^early] Missing.[^missing]
     ```ts
     const citation = "book";
     ```
+
+    <LanguageTabs label="Citation examples">
+
+    ```ts title="TypeScript citation"
+    const citation = "book";
+    ```
+
+    ```py title="Python citation"
+    citation = "book"
+    ```
+
+    </LanguageTabs>
 
 [^unused]: This should not appear.
 [^later]: Duplicate definition should not replace the first.

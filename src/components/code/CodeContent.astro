@@ -1,12 +1,13 @@
 ---
 import { extractCodeParts } from '../../code/markdown.server';
 import { highlightSnippet } from '../../code/snippets.server';
-import CodeBlock from './CodeBlock.astro';
+import { randomUUID } from 'node:crypto';
+import CodeExample from './CodeExample.svelte';
 
 const parts = extractCodeParts(await Astro.slots.render('default'));
 ---
 
 {parts.map(part => 'snippet' in part
- ? <CodeBlock snippet={highlightSnippet(part.snippet)} />
+ ? <CodeExample client:load kind="standalone" id={`code-${randomUUID()}`} snippet={highlightSnippet(part.snippet)} />
  : <Fragment set:html={part.html} />
 )}

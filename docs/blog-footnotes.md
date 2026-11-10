@@ -32,19 +32,33 @@ permanent heading. A focused floating note is retained until focus leaves, even
 when scrolling would otherwise hide it. The region is nonmodal and does not
 announce automatic changes.
 
-The parser owns canonical content. A TypeScript DOM adapter resolves its semantic
-attributes into an article-local model; a pure policy selects unique notes.
-The Astro component owns the dock markup. The client entry point connects an
-observer module to the selection policy and a dock view. The observer module
-owns browser events and frame batching; visibility helpers handle geometry. The
-view renders the selected notes, retains keyed nodes and owns focus preservation.
-The client entry point cleans up both parts on Astro navigation. Floating content is a passive copy: controls,
-live regions and hydrated islands are omitted, code presentation is retained,
-and IDs and internal relationships are namespaced. Rich interactions remain in
-the permanent notes. No new dependencies or build transforms are required.
+The parser owns canonical content. `FloatingFootnotes.svelte` is the only public
+UI entry point, mounted with `client:load` by the blog layout. Its optional
+`articleSelector` defaults to `[data-article-body]` and is resolved after mounting.
+The component discovers article-local notes through `dom.ts`, uses the pure
+selection policy in `model.ts`, and coordinates `observe.ts` and visibility helpers.
+It waits for complete initial observations and batches geometry in animation frames.
+Missing content or observer APIs leave the dock hidden and native notes usable.
 
-Validation includes Node/happy-dom policy, adapter and lifecycle tests, plus an
-isolated Astro build of actual Markdown and MDX fixtures through BlogPost and
-CodeContent. Storybook provides typography and narrow-screen examples. Real
-browser scrolling, mobile visual viewport, zoom, print preview, and screen reader
-verification must also be performed; DOM tests do not establish those behaviors.
+Svelte owns the keyed note containers. The rendered set combines selected notes
+and notes containing focus, ordered by canonical number. A private action alone
+owns each container's passive children; selection changes preserve focused nodes.
+Focusout triggers reevaluation. After DOM updates the component measures the dock
+for the root scroll offset. Teardown disconnects observers, events and frames and
+removes that property; Astro navigation uses the normal island lifecycle.
+
+Passive copies unwrap only recognized code-example islands. They preserve every
+labeled code panel before or after hydration, remove controls, live regions,
+scripts, event attributes and behavioral hooks, and namespace surviving IDs and
+internal relationships. Backlinks retain canonical article marker targets.
+Unrelated interactive islands are omitted; passive copies never hydrate or join
+language preference synchronization.
+
+Run `pnpm test`, `pnpm typecheck`, `pnpm build`, and `pnpm build-storybook`.
+Node tests cover policies and transforms, including real Markdown/MDX production
+builds through BlogPost and CodeContent and passive copies of generated islands.
+Vitest compiles and mounts the real Svelte components for interaction, observation,
+focus retention, stale callbacks and teardown. Storybook retains Astro composition
+stories and registers the framework's Svelte renderer for island hydration.
+Real browser checks establish layout and hydration; DOM tests cannot establish
+geometry, visual viewport, print, zoom, or screen-reader behavior.
