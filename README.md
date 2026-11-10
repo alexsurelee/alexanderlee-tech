@@ -52,6 +52,12 @@ During development, adding, removing, or renaming an HTML artefact automatically
 restarts the dev server to refresh viewer routes. Bulk file changes are debounced.
 Editing an existing document uses the normal development reload.
 
+Artefact catalogue and viewer pages include a `noindex` meta tag and are excluded
+from the sitemap. `public/_headers` applies `X-Robots-Tag: noindex` to the entire
+`/artefacts` section on Cloudflare, including standalone HTML documents and assets,
+without requiring changes to individual files. These headers apply after deployment;
+Astro's local dev server does not read `_headers`.
+
 Each viewer page uses the site's header and footer with a wide, scrollable iframe
 and an “Open standalone” link. HTML documents are copied unchanged and loaded from
 their original `/artefacts/project-name/pr-123.html` URLs inside the iframe, so

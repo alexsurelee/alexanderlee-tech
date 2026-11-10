@@ -1,0 +1,5 @@
+/artefacts
+  X-Robots-Tag: noindex
+
+/artefacts/*
+  X-Robots-Tag: noindex

@@ -6,13 +6,14 @@ import Header from '../../components/Header.astro';
 import { SITE_TITLE } from '../../consts';
 
 const artefacts = await getArtefacts();
-const description = 'Reports, demos, and supporting material for open source contributions.';
+const description = 'This is where I store my slop. ';
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={`Artefacts | ${SITE_TITLE}`} description={description} />
+		<meta name="robots" content="noindex" />
 	</head>
 	<body>
 		<Header />

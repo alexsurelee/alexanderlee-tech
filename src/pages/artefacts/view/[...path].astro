@@ -22,6 +22,7 @@ const { artefact } = Astro.props;
 <html lang="en">
 	<head>
 		<BaseHead title={`${artefact.path} | ${SITE_TITLE}`} description={`View ${artefact.path}, supporting material for an open source contribution.`} />
+		<meta name="robots" content="noindex" />
 	</head>
 	<body>
 		<Header />

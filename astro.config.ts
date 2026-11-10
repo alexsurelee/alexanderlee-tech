@@ -9,7 +9,13 @@ import artefactsDev from "./src/integrations/artefacts-dev.ts";
 export default defineConfig({
   site: "https://alexanderlee.tech",
   prefetch: true,
-  integrations: [mdx(), sitemap(), artefactsDev()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !/^\/artefacts(?:\/|$)/.test(new URL(page).pathname),
+    }),
+    artefactsDev(),
+  ],
   markdown: {
     syntaxHighlight: false,
     processor: unified({ remarkPlugins: [remarkCode] }),
