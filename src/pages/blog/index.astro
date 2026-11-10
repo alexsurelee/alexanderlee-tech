@@ -19,6 +19,9 @@ const posts = (await getCollection('blog')).sort(
 		<style>
 			.page-intro { margin-bottom: 2.5rem; }
 			.page-intro p { color: var(--muted); }
+			.empty-state { border-block: 1px solid var(--rule); padding-block: 1.75rem; }
+			.empty-state p { margin: 0; }
+			.empty-state p + p { margin-top: 0.5rem; color: var(--muted); }
 			ul { list-style: none; margin: 0; padding: 0; }
 			li { border-top: 1px solid var(--rule); }
 			li:last-child { border-bottom: 1px solid var(--rule); }
@@ -52,22 +55,29 @@ const posts = (await getCollection('blog')).sort(
 				<h1>Blog</h1>
 				<p>Thoughts, notes, and things I’m learning along the way.</p>
 			</div>
-			<ul aria-label="Blog posts">
-				{posts.map((post) => (
-					<li>
-						<a class="post-link" href={`/blog/${post.id}/`}>
-							<div>
-								<p class="date"><FormattedDate date={post.data.pubDate} /></p>
-								<h2 class="title">{post.data.title}</h2>
-								<p class="description">{post.data.description}</p>
-							</div>
-							{post.data.heroImage && (
-								<Image width={224} height={224} src={post.data.heroImage} alt="" />
-							)}
-						</a>
-					</li>
-				))}
-			</ul>
+			{posts.length === 0 ? (
+				<div class="empty-state">
+					<p>No posts yet.</p>
+					<p><a href="/rss.xml">Subscribe via RSS</a> to catch the first one.</p>
+				</div>
+			) : (
+				<ul aria-label="Blog posts">
+					{posts.map((post) => (
+						<li>
+							<a class="post-link" href={`/blog/${post.id}/`}>
+								<div>
+									<p class="date"><FormattedDate date={post.data.pubDate} /></p>
+									<h2 class="title">{post.data.title}</h2>
+									<p class="description">{post.data.description}</p>
+								</div>
+								{post.data.heroImage && (
+									<Image width={224} height={224} src={post.data.heroImage} alt="" />
+								)}
+							</a>
+						</li>
+					))}
+				</ul>
+			)}
 		</main>
 		<Footer />
 	</body>
