@@ -8,6 +8,9 @@ import Header from '../components/Header.astro';
 import CodeContent from '../components/code/CodeContent.astro';
 import CodeBehavior from '../components/code/CodeBehavior.astro';
 import '../styles/code.css';
+import '../styles/footnotes.css';
+import FloatingFootnotes from '../components/footnotes/FloatingFootnotes.astro';
+import FootnoteBehavior from '../components/footnotes/FootnoteBehavior.astro';
 import { SITE_TITLE } from '../consts';
 
 type Props = CollectionEntry<'blog'>['data'];
@@ -58,11 +61,13 @@ const { title, description, status, createdDate, publishedDate, updatedDate, her
 						<h1>{title}</h1>
 						<hr />
 					</div>
-					<CodeContent><slot /></CodeContent>
+					<div data-article-body><CodeContent><slot /></CodeContent></div>
 				</div>
 			</article>
 		</main>
 		<Footer />
 		<CodeBehavior />
+		<FloatingFootnotes />
+		<FootnoteBehavior />
 	</body>
 </html>

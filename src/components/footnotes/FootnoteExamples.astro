@@ -1,0 +1,19 @@
+---
+import CodeContent from '../code/CodeContent.astro';
+import FloatingFootnotes from './FloatingFootnotes.astro';
+import FootnoteBehavior from './FootnoteBehavior.astro';
+import { createMarkdownProcessor } from '@astrojs/markdown-remark';
+import remarkCode from '../../code/markdown.server';
+import '../../../src/styles/footnotes.css';
+import '../../../src/styles/code.css';
+import source from '../../../tests/fixtures/footnotes.md?raw';
+interface Props { long?: boolean; narrow?: boolean; dark?: boolean }
+const { long = false, narrow = false, dark = false } = Astro.props;
+const processor = await createMarkdownProcessor({ remarkPlugins: [remarkCode], syntaxHighlight: false });
+const result = await processor.render(long ? source.replace('    Another paragraph.', '    Another paragraph. ' + 'A longer explanation preserves all the citation context. '.repeat(80)) : source);
+---
+<div style={`max-width:${narrow ? 320 : 720}px;margin:2rem auto;${dark ? "--paper:#191b1c;--ink:#e8e2d7;background:var(--paper);color:var(--ink);padding:1rem" : ""}`} data-article-body>
+ <CodeContent><Fragment set:html={result.code} /></CodeContent>
+</div>
+<FloatingFootnotes />
+<FootnoteBehavior />

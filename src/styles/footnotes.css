@@ -1,0 +1,37 @@
+html { scroll-padding-bottom: calc(var(--footnote-offset, 0px) + 1rem); }
+[data-article-body] [data-footnote-ref] {
+ font-size: 0.75em;
+ font-variant-numeric: tabular-nums;
+ padding-inline: 0.1em;
+}
+[data-article-body] sup:has([data-footnote-ref]) { vertical-align: baseline; position: relative; top: -0.45em; line-height: 0; }
+[data-article-body] [data-footnotes], [data-floating-footnotes] {
+ font: 16px/1.5 var(--font-body);
+ color: var(--ink);
+}
+[data-article-body] [data-footnotes] { margin-top: 3rem; padding-top: 1rem; }
+[data-article-body] [data-footnotes]::before { content: ''; display: block; width: 5rem; border-top: 1px solid currentColor; margin-bottom: 1rem; }
+[data-article-body] [data-footnotes] h2 { font-size: 1rem; margin-block: 0 1rem; }
+/* The parser's accessible heading remains visible for deliberate navigation. */
+[data-article-body] [data-footnotes] h2.sr-only { position: static; width: auto; height: auto; padding: 0; clip: auto; overflow: visible; white-space: normal; }
+[data-article-body] [data-footnotes] ol, [data-floating-note-list] { padding-left: 1.8rem; }
+[data-article-body] [data-footnotes] li, [data-floating-note-list] > li { padding-left: 0.4rem; margin-block: 0.7rem; }
+[data-article-body] [data-footnotes] p, [data-floating-note-list] p { margin-block: 0.5rem; }
+[data-article-body] [data-footnotes] :target { scroll-margin-top: 1.5rem; }
+[data-floating-footnotes] {
+ position: fixed; z-index: 30; inset: auto 0 0;
+ box-sizing: border-box; max-height: min(30dvh, 16rem);
+ background: var(--paper); border-top: 1px solid var(--ink);
+ padding: 0.4rem 1.25rem env(safe-area-inset-bottom);
+ overflow: auto; overscroll-behavior: contain;
+}
+[data-floating-footnotes][hidden] { display: none; }
+.footnote-dock-inner { width: min(var(--content-width), 100%); margin-inline: auto; }
+[data-all-footnotes] { display: inline-flex; align-items: center; min-height: 44px; }
+[data-floating-note-list] { margin-block: 0 0.75rem; }
+[data-floating-note-list] pre { overflow: auto; }
+@media print {
+ [data-floating-footnotes] { display: none !important; }
+ [data-article-body] [data-footnotes] { color: black; }
+ html { scroll-padding: 0; }
+}
