@@ -6,7 +6,10 @@ import HeaderLink from './HeaderLink.astro';
 <header>
 	<nav aria-label="Main navigation">
 		<h2>
-			<a href="/">{SITE_TITLE}</a>
+			<a href="/">
+				<img class="brand-mark" src="/brand/logo.svg" alt="" width="44" height="44" />
+				<span>{SITE_TITLE}</span>
+			</a>
 		</h2>
 		<div class="internal-links">
 			<HeaderLink href="/">
@@ -51,7 +54,8 @@ import HeaderLink from './HeaderLink.astro';
 		padding-block: 1rem;
 	}
 	h2 { margin: 0; font-family: 'Charter Header', var(--font-body); font-size: 1.25rem; letter-spacing: -0.02em; }
-	h2 a { display: inline-flex; align-items: center; min-height: 44px; }
+	h2 a { display: inline-flex; align-items: center; gap: 0.65rem; min-height: 44px; }
+	.brand-mark { display: block; flex-shrink: 0; width: 44px; height: 44px; border-radius: 0; }
 	a { color: var(--ink); text-decoration: none; }
 	.internal-links { display: flex; gap: 0.25rem; }
 	/* Snapshot only the text, leaving each link box available for another click. */
