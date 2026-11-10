@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import type { PublishedPost } from '../blog/posts.server';
+import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
@@ -10,14 +10,15 @@ import CodeBehavior from '../components/code/CodeBehavior.astro';
 import '../styles/code.css';
 import { SITE_TITLE } from '../consts';
 
-type Props = PublishedPost['data'];
+type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, publishedDate, updatedDate, heroImage } = Astro.props;
+const { title, description, status, createdDate, publishedDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
 		<BaseHead title={`${title} | ${SITE_TITLE}`} description={description} />
+		{status === 'draft' && <meta name="robots" content="noindex" />}
 		<style>
 			main { width: min(var(--site-width), calc(100% - 3rem)); }
 			.hero-image { margin-bottom: 3rem; }
@@ -46,7 +47,8 @@ const { title, description, publishedDate, updatedDate, heroImage } = Astro.prop
 				<div class="prose">
 					<div class="title">
 						<div class="date">
-							<FormattedDate date={publishedDate} />
+							{status === 'draft' && <strong>Draft · Created </strong>}
+							<FormattedDate date={publishedDate ?? createdDate} />
 							{updatedDate && (
 								<div class="last-updated-on">
 									Last updated on <FormattedDate date={updatedDate} />

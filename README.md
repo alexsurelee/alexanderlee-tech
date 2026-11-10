@@ -50,9 +50,13 @@ createdDate: "2026-11-10"
 ---
 ```
 
-Drafts have no page, listing, RSS entry, or sitemap entry, including during local
-development. Their source remains in the repository; this does not hide it from
-anyone who can read the repository.
+During local development (`pnpm astro dev --background`), drafts appear on the
+blog and have their own pages, labelled “Draft” with their creation date.
+Production builds exclude drafts from pages, listings, RSS, and the sitemap.
+`pnpm preview` serves the production build, so it also excludes drafts. RSS remains
+published-only during development. Draft source remains in the repository; this
+does not hide it from anyone who can read the repository. Development previews
+have no authentication, so anyone who can reach the dev server can see drafts.
 
 To publish, change `status` to `published` and add
 `publishedDate: "2026-11-12"`. Keep `createdDate` unchanged. The next build creates
@@ -66,9 +70,10 @@ publication cannot precede creation, and updates cannot precede creation or
 publication. Optional `heroImage` works in either state.
 
 The domain schema and state types live in `src/blog/post.ts`. The content collection
-adds Astro's image validation. Routes and RSS share `getPublishedPosts()` from
-`src/blog/posts.server.ts`, so public consumers receive only published posts.
-The post layout also requires the published state at the type level.
+adds Astro's image validation. Routes use `getVisiblePosts()` from
+`src/blog/posts.server.ts`, which includes drafts only in development. RSS uses
+the strict `getPublishedPosts()` query in every environment. The post layout
+handles both states without assigning a publication date to drafts.
 
 ## Artefacts
 
